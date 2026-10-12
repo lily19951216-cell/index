@@ -233,11 +233,6 @@
 
         <!-- Smart Route Optimization & Tools Bar -->
         <div class="flex items-center gap-1 flex-shrink-0 flex-wrap">
-          <button id="optimizeRouteBtn" class="px-2.5 py-1 text-[10.5px] font-black rounded-lg text-indigo-700 dark:text-indigo-300 bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 flex items-center gap-1 active:scale-95 transition shadow-2xs" title="以起點為中心，運用近鄰演算法一鍵排定最佳順序並推算時刻">
-            <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-            <span>一鍵最佳化行程</span>
-          </button>
-
           <button id="recalcTimesBtn" class="px-2 py-1 text-[10.5px] font-bold rounded-lg text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center gap-1 active:scale-95 transition" title="重新鏈結推算時間">
             <i class="fa-solid fa-clock-rotate-left text-[10px]"></i>
             <span class="hidden xs:inline">順推時間</span>
@@ -320,14 +315,10 @@
   </main>
 
   <aside class="fixed bottom-0 left-0 right-0 z-30 theme-card-bg/95 backdrop-blur-md border-t theme-card-border py-1 px-1 lg:hidden pb-safe shadow-lg transition-colors">
-    <div class="w-full max-w-md mx-auto grid grid-cols-5 gap-0.5 text-center">
+    <div class="w-full max-w-md mx-auto grid grid-cols-4 gap-0.5 text-center">
       <button id="mobileAddStopBtn" class="flex flex-col items-center justify-center py-1 theme-primary-text font-bold text-[9.5px] rounded active:scale-95 transition">
         <i class="fa-solid fa-circle-plus text-base mb-0.5"></i>
         <span>加景點</span>
-      </button>
-      <button id="mobileOptimizeRouteBtn" class="flex flex-col items-center justify-center py-1 text-indigo-600 font-bold text-[9.5px] rounded active:scale-95 transition">
-        <i class="fa-solid fa-wand-magic-sparkles text-base mb-0.5"></i>
-        <span>最佳化</span>
       </button>
       <button id="mobileOpenSplitBtn" class="flex flex-col items-center justify-center py-1 text-emerald-600 font-bold text-[9.5px] rounded active:scale-95 transition">
         <i class="fa-solid fa-receipt text-base mb-0.5"></i>
@@ -393,7 +384,7 @@
         <div class="p-2.5 bg-indigo-50/60 dark:bg-indigo-950/30 rounded-lg border border-indigo-200 dark:border-indigo-900/50 space-y-1.5">
           <div class="flex items-center justify-between">
             <label class="block font-bold text-[10.5px] text-indigo-900 dark:text-indigo-300">
-              <i class="fa-solid fa-crosshairs mr-1"></i>地理座標 (用於自動由近到遠排序)
+              <i class="fa-solid fa-crosshairs mr-1"></i>地理座標 (用於計算各站里程)
             </label>
             <span class="text-[9px] text-indigo-500">支援自動補全與自訂</span>
           </div>
@@ -407,14 +398,6 @@
               <input type="number" step="any" id="formStopLng" placeholder="如：135.4983" class="w-full px-2 py-1 border theme-card-border rounded text-xs bg-white dark:bg-slate-800 font-mono">
             </div>
           </div>
-        </div>
-
-        <!-- Auto-Sort on Add Option Toggle -->
-        <div id="autoSortCheckboxContainer" class="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-900/60 rounded-lg border theme-card-border">
-          <input type="checkbox" id="formAutoSortOnAdd" checked class="w-4 h-4 rounded text-indigo-600 focus:ring-0">
-          <label for="formAutoSortOnAdd" class="text-[11px] font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
-            新增後依時間與距離自動排入最佳行程順序
-          </label>
         </div>
 
         <!-- Icon Picker for Stop -->
@@ -728,30 +711,31 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "osaka_5d4n_travel_proximity_v5";
-    const EXPENSES_KEY = "osaka_expenses_data_v5";
-    const THEME_KEY = "osaka_theme_v5";
+    const STORAGE_KEY = "osaka_5d4n_travel_proximity_v6";
+    const EXPENSES_KEY = "osaka_expenses_data_v6";
+    const THEME_KEY = "osaka_theme_v6";
 
     const POPULAR_LOCATIONS = [
       { name: "香榭麗大國 2 (大國町民宿)", address: "大阪府大阪市浪速区大国2丁目", lat: 34.6548, lng: 135.4983, icon: "fa-hotel", category: "lodging" },
       { name: "大國町站", address: "大阪府大阪市浪速区大国3丁目", lat: 34.6545, lng: 135.4975, icon: "fa-train", category: "transit" },
+      { name: "木津卸売市場", address: "大阪府大阪市浪速区敷津東2丁目2-8", lat: 34.6568, lng: 135.5002, icon: "fa-bowl-rice", category: "food" },
       { name: "住吉大社", address: "大阪府大阪市住吉区住吉2丁目9-89", lat: 34.6133, lng: 135.4929, icon: "fa-torii-gate", category: "sight" },
+      { name: "道頓堀 固力果跑跑人", address: "大阪府大阪市中央区道頓堀1丁目10-3", lat: 34.6687, lng: 135.5013, icon: "fa-camera", category: "sight" },
       { name: "焼肉㐂舌 南船場店 (心齋橋)", address: "大阪府大阪市中央区南船場4丁目11-22", lat: 34.6775, lng: 135.5015, icon: "fa-drumstick-bite", category: "food" },
       { name: "あぶりや 千日前店 (難波)", address: "大阪府大阪市中央区難波3丁目4-16", lat: 34.6661, lng: 135.5034, icon: "fa-drumstick-bite", category: "food" },
-      { name: "道頓堀 固力果跑跑人", address: "大阪府大阪市中央区道頓堀1丁目10-3", lat: 34.6687, lng: 135.5013, icon: "fa-camera", category: "sight" },
       { name: "通天閣 / 新世界", address: "大阪府大阪市浪速区恵美須東1丁目18-6", lat: 34.6525, lng: 135.5063, icon: "fa-landmark", category: "sight" },
       { name: "大阪城天守閣", address: "大阪府大阪市中央区大阪城1-1", lat: 34.6873, lng: 135.5262, icon: "fa-fort-awesome", category: "sight" },
-      { name: "梅田藍天大廈空中庭園", address: "大阪府大阪市北区大淀中1丁目1-88", lat: 34.7059, lng: 135.4897, icon: "fa-camera", category: "sight" },
-      { name: "JR 大阪站 / 梅田", address: "大阪府大阪市北区梅田3丁目1-1", lat: 34.7024, lng: 135.4959, icon: "fa-train", category: "transit" },
-      { name: "箕面萱野站", address: "大阪府箕面市萱野2丁目", lat: 34.8360, lng: 135.4880, icon: "fa-train", category: "transit" },
       { name: "勝尾寺 (滿山達摩)", address: "大阪府箕面市勝尾寺", lat: 34.8601, lng: 135.4912, icon: "fa-torii-gate", category: "sight" },
       { name: "箕面瀑布", address: "大阪府箕面市箕面公園2-2", lat: 34.8488, lng: 135.4746, icon: "fa-mountain-sun", category: "sight" },
+      { name: "Minoh Q's MALL", address: "大阪府箕面市西宿1丁目17-22", lat: 34.8340, lng: 135.4890, icon: "fa-bag-shopping", category: "food" },
       { name: "朝日啤酒吹田工廠", address: "大阪府吹田市西の庄町1-45", lat: 34.7610, lng: 135.5218, icon: "fa-beer-mug-empty", category: "sight" },
+      { name: "梅田藍天大廈空中庭園", address: "大阪府大阪市北区大淀中1丁目1-88", lat: 34.7059, lng: 135.4897, icon: "fa-camera", category: "sight" },
       { name: "國寶姬路城 (白鷺城)", address: "兵庫県姫路市本町68", lat: 34.8394, lng: 134.6939, icon: "fa-fort-awesome", category: "sight" },
-      { name: "神戶三宮站", address: "兵庫県神戸市中央区加納町4丁目", lat: 34.6943, lng: 135.1955, icon: "fa-train", category: "transit" },
-      { name: "北野異人館街", address: "兵庫県神戸市中央区北野町3丁目3-1", lat: 34.7003, lng: 135.1903, icon: "fa-landmark", category: "sight" },
+      { name: "神戶三宮站 (神戶牛午餐)", address: "兵庫県神戸市中央区北長狭通2丁目12-6", lat: 34.6943, lng: 135.1955, icon: "fa-drumstick-bite", category: "food" },
+      { name: "北野異人館街 ＆ 天滿神社", address: "兵庫県神戸市中央区北野町3丁目3-1", lat: 34.7003, lng: 135.1903, icon: "fa-landmark", category: "sight" },
       { name: "神戶臨海樂園 umie", address: "兵庫県神戸市中央区東川崎町1丁目7-2", lat: 34.6792, lng: 135.1834, icon: "fa-camera", category: "sight" },
       { name: "日本環球影城 (USJ)", address: "大阪府大阪市此花区桜島2丁目1-33", lat: 34.6654, lng: 135.4323, icon: "fa-ticket", category: "sight" },
+      { name: "Universal CityWalk", address: "大阪府大阪市此花区島屋6丁目2-61", lat: 34.6675, lng: 135.4360, icon: "fa-utensils", category: "food" },
       { name: "臨空城 Outlet (Rinku)", address: "大阪府泉佐野市りんくう往来南3-28", lat: 34.4072, lng: 135.2952, icon: "fa-bag-shopping", category: "sight" },
       { name: "關西國際機場 (KIX)", address: "大阪府泉佐野市泉州空港北1", lat: 34.4320, lng: 135.2304, icon: "fa-plane-departure", category: "transit" }
     ];
@@ -780,13 +764,13 @@
     const DEFAULT_ITINERARY_DATA = [
       {
         day: 1,
-        title: "抵達大阪 ＆ 悠閒住吉大社巡禮",
-        theme: "南大阪歷史・極上熟成和牛",
-        desc: "入住大國町民宿，漫步千年神社朱紅反橋，晚餐享用極上熟成和牛／燒肉。",
+        title: "抵達關西 ➔ 放行李 ➔ 住吉大社 ＆ 心齋橋和牛",
+        theme: "南大阪歷史・道頓堀夜景・極上熟成和牛",
+        desc: "以關西機場為起點，直達大國町放行李後南下住吉大社祈願，再一路北順至道頓堀與心齋橋享用燒肉晚餐。",
         stops: [
           {
             id: "d1-s1",
-            name: "關西機場 (KIX) ➔ 前往大國町",
+            name: "關西機場 (KIX) ➔ 南海空港急行出發",
             address: "大阪府泉佐野市泉州空港北1",
             lat: 34.4320,
             lng: 135.2304,
@@ -795,7 +779,7 @@
             stayMins: 15,
             travelMode: "南海電鐵 空港急行",
             travelMins: 45,
-            travelDetail: "搭急行至新今宮，轉地鐵1站至大國町",
+            travelDetail: "搭南海急行至新今宮，轉地鐵1站至大國町",
             depTime: "14:00",
             arrTime: "14:45",
             note: "出關後直接刷 iPhone Suica/ICOCA 快速進站乘車。",
@@ -805,39 +789,38 @@
           },
           {
             id: "d1-s2",
-            name: "香榭麗大國 2 民宿 (入住放行李)",
+            name: "香榭麗大國 2 (民宿入住放行李)",
             address: "大阪府大阪市浪速区大国2丁目",
             lat: 34.6548,
             lng: 135.4983,
             icon: "fa-hotel",
             category: "lodging",
-            stayMins: 45,
-            travelMode: "地鐵四橋線 / 南海電鐵",
-            travelMins: 20,
-            travelDetail: "大國町站搭車至住吉東或玉出站徒步 5 分",
+            stayMins: 35,
+            travelMode: "南海本線 / 阪堺電車",
+            travelMins: 15,
+            travelDetail: "大國町搭車至住吉東或玉出站徒步 5 分",
             depTime: "15:00",
-            arrTime: "15:20",
-            note: "換上好走運動鞋，準備前往南大阪歷史古蹟。",
+            arrTime: "15:15",
+            note: "放妥行李，換上好走運動鞋，出發前往千年神社。",
             shops: [
-              { id: "sh-2", name: "藏壽司 なんば元町店", address: "大阪府大阪市浪速区敷津西1-2-15", icon: "fa-utensils", cat: "food", price: "$$", desc: "民宿北側步行 2 分鐘，平價迴轉壽司。", query: "くら寿司 なんば元町店 大阪府大阪市浪速区敷津西1-2-15" },
-              { id: "sh-3", name: "玉出超市 (大國町店)", address: "大阪府大阪市浪速区大国1丁目1-8", icon: "fa-bag-shopping", cat: "goods", price: "$", desc: "傳奇平價超市，採買飲用水與零食。", query: "スーパー玉出 大国町店 大阪府大阪市浪速区大国1丁目1-8" }
+              { id: "sh-2", name: "玉出超市 (大國町店)", address: "大阪府大阪市浪速区大国1丁目1-8", icon: "fa-bag-shopping", cat: "goods", price: "$", desc: "傳奇平價超市，採買飲用水與零食。", query: "スーパー玉出 大国町店 大阪府大阪市浪速区大国1丁目1-8" }
             ]
           },
           {
             id: "d1-s3",
-            name: "住吉大社 (千年古社 ＆ 反橋祈願)",
+            name: "住吉大社 (南大阪千年古社 ＆ 朱紅反橋)",
             address: "大阪府大阪市住吉区住吉2丁目9-89",
             lat: 34.6133,
             lng: 135.4929,
             icon: "fa-torii-gate",
             category: "sight",
             stayMins: 75,
-            travelMode: "大阪地鐵 御堂筋線",
+            travelMode: "南海電鐵 / 大阪地鐵 御堂筋線",
             travelMins: 20,
-            travelDetail: "搭地鐵回大國町轉乘御堂筋線，直達心齋橋站（約 4 分）",
-            depTime: "16:05",
-            arrTime: "16:25",
-            note: "跨越拱形反橋洗滌身心，在第一本宮尋找五大力石頭求福。",
+            travelDetail: "由住吉鳥居前搭車回難波／心齋橋商圈（順向北上）",
+            depTime: "15:50",
+            arrTime: "16:10",
+            note: "跨越拱形太鼓反橋洗滌身心，在第一本宮尋找五大力石頭求福。",
             shops: [
               { id: "sh-4", name: "末廣堂 薩摩燒老鋪", address: "大阪府大阪市住吉区東粉浜3丁目12-14", icon: "fa-bowl-rice", cat: "goods", price: "$", desc: "門前銘菓，酥香紅豆和菓子配熱茶絕配。", query: "末廣堂 大阪府大阪市住吉区東粉浜3丁目12-14" },
               { id: "sh-5", name: "森森舎 咖啡烘焙", address: "大阪府大阪市住吉区万代3丁目4-12", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "南大阪手作陶器與精緻手沖咖啡甜點。", query: "森森舎 大阪府大阪市住吉区万代3丁目4-12" }
@@ -845,6 +828,25 @@
           },
           {
             id: "d1-s4",
+            name: "道頓堀 ＆ 心齋橋商店街 (固力果跑跑人)",
+            address: "大阪府大阪市中央区道頓堀1丁目10-3",
+            lat: 34.6687,
+            lng: 135.5013,
+            icon: "fa-camera",
+            category: "sight",
+            stayMins: 55,
+            travelMode: "步行",
+            travelMins: 8,
+            travelDetail: "沿戎橋筋漫步北行至南船場餐廳",
+            depTime: "17:25",
+            arrTime: "17:33",
+            note: "黃昏時分在戎橋上與固力果招牌合照，感受大阪運河繁華氣氛。",
+            shops: [
+              { id: "sh-3", name: "本家大章魚燒 道頓堀", address: "大阪府大阪市中央区道頓堀1丁目4-16", icon: "fa-utensils", cat: "food", price: "$", desc: "外皮焦香、章魚超大顆的元祖道頓堀排隊章魚燒。", query: "本家大たこ 道頓堀" }
+            ]
+          },
+          {
+            id: "d1-s5",
             name: "晚餐：焼肉㐂舌 南船場店 (熟成黑毛和牛)",
             address: "大阪府大阪市中央区南船場4丁目11-22",
             lat: 34.6775,
@@ -853,10 +855,10 @@
             category: "food",
             stayMins: 90,
             travelMode: "大阪地鐵 御堂筋線",
-            travelMins: 10,
+            travelMins: 6,
             travelDetail: "心齋橋站搭御堂筋線，2站4分鐘直達大國町",
-            depTime: "18:00",
-            arrTime: "18:10",
+            depTime: "18:30",
+            arrTime: "18:36",
             note: "低溫熟成黑毛和牛個室包廂，肉質極致鮮美，線上中文訂位。",
             shops: [
               { id: "sh-6", name: "焼肉㐂舌 南船場店", address: "大阪府大阪市中央区南船場4丁目11-22-B1F", icon: "fa-drumstick-bite", cat: "food", price: "$$$", desc: "熟成黑毛和牛獨立包廂，肉質極致鮮美，線上中文訂位。", query: "焼肉㐂舌 南船場店 大阪府大阪市中央区南船場4-11-22" },
@@ -864,7 +866,7 @@
             ]
           },
           {
-            id: "d1-s5",
+            id: "d1-s6",
             name: "返回香榭麗大國 2 休息",
             address: "大阪府大阪市浪速区大国2丁目",
             lat: 34.6548,
@@ -873,11 +875,11 @@
             category: "lodging",
             stayMins: 0,
             travelMode: "步行",
-            travelMins: 5,
-            travelDetail: "大國町站步行 4-6 分鐘回民宿",
-            depTime: "20:00",
-            arrTime: "20:05",
-            note: "洗熱水澡整理行李，確認明早前往箕面勝尾寺的搭車時刻。",
+            travelMins: 4,
+            travelDetail: "大國町站步行 4 分鐘回民宿",
+            depTime: "20:10",
+            arrTime: "20:14",
+            note: "採買宵夜回民宿泡澡休息，確認明早直奔勝尾寺的搭車時刻。",
             shops: [
               { id: "sh-8", name: "全家便利商店 大國町站前店", address: "大阪府大阪市浪速区敷津西2丁目1-1", icon: "fa-store", cat: "night", price: "$", desc: "買瓶日本明治牛乳與甜點作為睡前宵夜。", query: "ファミリーマート 大国町駅前店" }
             ]
@@ -886,13 +888,13 @@
       },
       {
         day: 2,
-        title: "北大阪自然祈運 ＆ 朝日啤酒體驗",
-        theme: "萬尊達摩勝運・森林瀑布・Super Dry 見學",
-        desc: "搭御堂筋線直通箕面萱野，上山朝聖勝尾寺滿山達摩，漫步箕面瀑布吸收芬多精，下午探訪吹田朝日啤酒發祥地試飲！",
+        title: "北大阪達摩勝運 ➔ 森林飛瀑 ➔ 吹田啤酒 ➔ 梅田夕陽夜景",
+        theme: "萬尊達摩勝運・森林瀑布・Super Dry 見學・梅田空中庭園",
+        desc: "以民宿為起點一線直通最北端勝尾寺，沿溪谷下行賞瀑，午後順路至吹田朝日啤酒見學，傍晚順路南下梅田空中庭園俯瞰大阪夕陽夜景。",
         stops: [
           {
             id: "d2-s1",
-            name: "大國町 ➔ 箕面萱野站 ➔ 勝尾寺",
+            name: "大國町起點 ➔ 御堂筋線直通箕面萱野 ➔ 勝尾寺",
             address: "大阪府箕面市萱野2丁目",
             lat: 34.8360,
             lng: 135.4880,
@@ -901,48 +903,48 @@
             stayMins: 10,
             travelMode: "御堂筋線(直通北急) + 阪急巴士",
             travelMins: 50,
-            travelDetail: "大國町直達箕面萱野站，轉乘公車至勝尾寺門口",
-            depTime: "08:30",
-            arrTime: "09:20",
-            note: "北大阪急行延伸後免轉車直通箕面山腳，交通極為順暢。",
+            travelDetail: "大國町直通箕面萱野站，轉乘公車直達勝尾寺門口",
+            depTime: "08:20",
+            arrTime: "09:10",
+            note: "北大阪急行延伸後免換車直通箕面山腳，一班車順暢到底。",
             shops: [
               { id: "sh-9", name: "勝尾寺 達摩賣店", address: "大阪府箕面市勝尾寺", icon: "fa-bag-shopping", cat: "goods", price: "$", desc: "購買專屬許願達摩不倒翁（點右眼祈願），拍照極壯觀。", query: "勝尾寺 大阪府箕面市勝尾寺" }
             ]
           },
           {
             id: "d2-s2",
-            name: "勝尾寺 (滿山達摩 ＆ 勝運祈願)",
+            name: "勝尾寺 (萬尊達摩 ＆ 勝運祈願神社)",
             address: "大阪府箕面市勝尾寺",
             lat: 34.8601,
             lng: 135.4912,
             icon: "fa-torii-gate",
             category: "sight",
-            stayMins: 80,
+            stayMins: 85,
             travelMode: "自然步道 / 巴士",
             travelMins: 20,
-            travelDetail: "漫步連接自然步道前往箕面瀑布步道起點",
-            depTime: "09:30",
-            arrTime: "09:50",
-            note: "境內階梯擺滿遊客還願的小達摩，祈求事業與人生勝運極為靈驗。",
+            travelDetail: "漫步連接自然步道前往箕面瀑布步道頂端（順路下坡）",
+            depTime: "09:20",
+            arrTime: "09:40",
+            note: "階梯岩壁擺滿無數小達摩，祈求事業與學業勝運極為靈驗。",
             shops: [
               { id: "sh-10", name: "勝尾寺辨天茶屋", address: "大阪府箕面市勝尾寺", icon: "fa-mug-hot", cat: "cafe", price: "$", desc: "享用達摩和菓子、宇治抹茶冰淇淋與甘甜熱茶。", query: "勝尾寺 辨天茶屋" }
             ]
           },
           {
             id: "d2-s3",
-            name: "箕面瀑布 (落差33米壯麗飛瀑)",
+            name: "箕面瀑布 (落差33米壯麗自然飛瀑)",
             address: "大阪府箕面市箕面公園2-2",
             lat: 34.8488,
             lng: 135.4746,
             icon: "fa-mountain-sun",
             category: "sight",
             stayMins: 60,
-            travelMode: "健行下坡至箕面萱野 (Q's MALL)",
-            travelMins: 30,
-            travelDetail: "沿著平緩溪谷步道下行，吸收豐富負離子",
-            depTime: "11:10",
-            arrTime: "11:40",
-            note: "沿路店家現場油炸販售箕面名物「炸楓葉天婦羅」。",
+            travelMode: "健行步道至 Minoh Q's MALL",
+            travelMins: 25,
+            travelDetail: "沿著平緩溪谷下坡，吸收豐富負離子",
+            depTime: "11:05",
+            arrTime: "11:30",
+            note: "沿路小店現炸販售箕面名物「炸楓葉天婦羅（紅葉天ぷら）」。",
             shops: [
               { id: "sh-11", name: "久國紅仙堂 炸楓葉", address: "大阪府箕面市箕面1丁目1-40", icon: "fa-bowl-rice", cat: "goods", price: "$", desc: "百年油炸楓葉名店，口感甜脆帶有淡淡白芝麻香。", query: "久國紅仙堂 大阪府箕面市箕面1丁目1-40" }
             ]
@@ -955,13 +957,13 @@
             lng: 135.4890,
             icon: "fa-utensils",
             category: "food",
-            stayMins: 60,
-            travelMode: "北急電車 轉 JR至吹田",
-            travelMins: 30,
-            travelDetail: "由箕面萱野搭至千里中央，轉電車至 JR/阪急吹田站",
-            depTime: "12:40",
-            arrTime: "13:10",
-            note: "musi-vege+cafe 享用高纖蒸蔬菜與豆乳湯定食，少油清爽回血。",
+            stayMins: 65,
+            travelMode: "北急電車 轉 JR至吹田 (南下順路)",
+            travelMins: 25,
+            travelDetail: "由箕面萱野搭至千里中央，轉電車直抵吹田站",
+            depTime: "12:35",
+            arrTime: "13:00",
+            note: "享用高纖蒸煮蔬菜與豆乳湯定食，清爽健康回血。",
             shops: [
               { id: "sh-13", name: "musi-vege+cafe 箕面店", address: "大阪府箕面市西宿1丁目15-30 みのおキューズモール CENTER棟2F", icon: "fa-bowl-rice", cat: "food", price: "$$", desc: "以季節蒸煮蔬菜與豆乳湯底為主打的養生和風定食。", query: "musi-vege+cafe みのおキューズモール店" }
             ]
@@ -975,149 +977,164 @@
             icon: "fa-beer-mug-empty",
             category: "sight",
             stayMins: 80,
-            travelMode: "JR 東海道本線",
-            travelMins: 20,
-            travelDetail: "由 JR 吹田站搭電車直達大阪站轉地鐵",
-            depTime: "14:30",
-            arrTime: "14:50",
-            note: "體驗虛擬裝罐影像，結尾試飲 2 杯極致低溫 Super Dry 生啤酒（需提前預約）。",
+            travelMode: "JR 東海道本線 (直達梅田/大阪站)",
+            travelMins: 12,
+            travelDetail: "由 JR 吹田站搭電車直達大阪站（僅 9 分鐘）",
+            depTime: "14:25",
+            arrTime: "14:37",
+            note: "體驗虛擬高速裝罐，試飲 2 杯極致低溫 Super Dry 生啤酒（需提前預約）。",
             shops: [
               { id: "sh-14", name: "Asahi Museum 限定店", address: "大阪府吹田市西の庄町1-45", icon: "fa-beer-mug-empty", cat: "goods", price: "$", desc: "吹田工廠限定生啤酒杯與啤酒酵母點心。", query: "アサヒビール ミュージアム 吹田工場" }
             ]
           },
           {
             id: "d2-s6",
-            name: "晚餐：金澤美味壽司 或 焼鳥のさくら 今里店",
-            address: "大阪府大阪市東成区大今里西1丁目30-20",
-            lat: 34.6685,
-            lng: 135.5430,
-            icon: "fa-drumstick-bite",
-            category: "food",
-            stayMins: 90,
-            travelMode: "地鐵千日前線 / 御堂筋線",
-            travelMins: 15,
-            travelDetail: "吹田站旁壽司，或搭至今里站吃備長炭燒鳥後回大國町",
-            depTime: "17:30",
-            arrTime: "17:45",
-            note: "二選一：吹田店直送能登喉黑魚壽司；或清單名店【焼鳥のさくら】備長炭雞肉串燒配生啤！",
+            name: "梅田藍天大廈空中庭園 (360度露天夕陽夜景)",
+            address: "大阪府大阪市北区大淀中1丁目1-88",
+            lat: 34.7059,
+            lng: 135.4897,
+            icon: "fa-camera",
+            category: "sight",
+            stayMins: 75,
+            travelMode: "大阪地鐵 御堂筋線 (直達回大國町)",
+            travelMins: 12,
+            travelDetail: "大阪梅田搭御堂筋線直達大國町站（約 10 分）",
+            depTime: "16:40",
+            arrTime: "16:52",
+            note: "登上 173 米高空露天展望台，俯瞰淀川夕陽與大阪市區百萬夜景。",
             shops: [
-              { id: "sh-16", name: "焼鳥のさくら 今里店", address: "大阪府大阪市東成区大今里西1丁目30-20", icon: "fa-beer-mug-empty", cat: "night", price: "$$", desc: "備長炭現烤大和肉雞串燒，肉汁爆滿香氣十足。", query: "焼鳥のさくら 今里店 大阪府大阪市東成区大今里西1-30-20" }
+              { id: "sh-15", name: "滝見小路 懷舊美食街", address: "大阪府大阪市北区大淀中1丁目1-88 梅田スカイビルB1F", icon: "fa-utensils", cat: "food", price: "$$", desc: "昭和復古街景地下美食街，品嚐熱騰騰大阪燒與拉麵。", query: "滝見小路 梅田スカイビルB1F" }
             ]
+          },
+          {
+            id: "d2-s7",
+            name: "返回香榭麗大國 2 休息",
+            address: "大阪府大阪市浪速区大国2丁目",
+            lat: 34.6548,
+            lng: 135.4983,
+            icon: "fa-house",
+            category: "lodging",
+            stayMins: 0,
+            travelMode: "步行",
+            travelMins: 4,
+            travelDetail: "大國町站出站步行 4 分鐘回民宿",
+            depTime: "19:00",
+            arrTime: "19:04",
+            note: "整理今天拍到的達摩與夕陽美照，準備明天一早姬路城之行。",
+            shops: []
           }
         ]
       },
       {
         day: 3,
-        title: "日本第一名城 ＆ 神戶洋風異人館",
-        theme: "世界文化遺產白鷺城・神戶牛・北野天滿神社",
-        desc: "啟用 JR 關西鐵路周遊券 1 日券！早上直奔姬路城大天守，中午神戶三宮品嚐神戶牛，午後漫步洋風異人館與天滿神社俯瞰港灣。",
+        title: "國寶白鷺城 ➔ 神戶三宮和牛 ➔ 異人館 ➔ 港灣夜景",
+        theme: "世界文化遺產白鷺城・神戶牛鐵板燒・北野天滿神社・神戶港塔",
+        desc: "啟用 JR 關西鐵路周遊券！以大國町為起點，先搭新快速直奔最西端姬路城，回程向東順路停靠神戶三宮吃神戶牛、登北野異人館，傍晚於臨海樂園賞港灣夜景。",
         stops: [
           {
             id: "d3-s1",
-            name: "大國町 ➔ JR 大阪站 ➔ JR 姬路站",
-            address: "兵庫県姫路市駅前町188-1",
-            lat: 34.8275,
-            lng: 134.6905,
-            icon: "fa-train",
-            category: "transit",
-            stayMins: 10,
-            travelMode: "JR 新快速 (直達姬路)",
-            travelMins: 70,
-            travelDetail: "地鐵至梅田，持 JR 周遊券搭【JR 新快速】直達姬路（約 62 分）",
-            depTime: "07:50",
-            arrTime: "09:00",
-            note: "出姬路站沿大手前通步行約 15 分鐘抵達姬路城大門。",
-            shops: [
-              { id: "sh-17", name: "Piole 姬路車站商場", address: "兵庫県姫路市駅前町188-1", icon: "fa-bag-shopping", cat: "goods", price: "$$", desc: "姬路玉椿和菓子與播州名物伴手禮街。", query: "ピオレ姫路 兵庫県姫路市駅前町188-1" }
-            ]
-          },
-          {
-            id: "d3-s2",
-            name: "國寶姬路城 (白鷺城登大天守)",
+            name: "大國町起點 ➔ JR 新快速直奔最西端：姬路城",
             address: "兵庫県姫路市本町68",
             lat: 34.8394,
             lng: 134.6939,
             icon: "fa-fort-awesome",
             category: "sight",
             stayMins: 130,
-            travelMode: "JR 新快速 (直達神戶三之宮)",
-            travelMins: 40,
-            travelDetail: "步行回姬路站，搭乘 JR 新快速約 40 分抵達三之宮站",
-            depTime: "09:20",
-            arrTime: "12:10",
-            note: "日本保存最完整的十二現存天守之首。天守閣階梯陡峭，建議預留 2 小時。",
+            travelMode: "JR 新快速 (直達姬路)",
+            travelMins: 65,
+            travelDetail: "大國町地鐵至梅田，持 JR 周遊券搭【JR 新快速】直達姬路（約 60 分）",
+            depTime: "07:45",
+            arrTime: "08:50",
+            note: "日本第一名城、現存十二天守之首。天守閣階梯陡峭，建議預留充足時間。",
             shops: [
-              { id: "sh-18", name: "好古園 活水軒", address: "兵庫県姫路市本町68", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "姬路城旁日式庭園餐廳，邊品茶邊賞鯉魚池泉。", query: "好古園 活水軒 兵庫県姫路市本町68" }
+              { id: "sh-18", name: "好古園 活水軒", address: "兵庫県姫路市本町68", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "姬路城旁日式庭園餐廳，邊品茶邊賞錦鯉池泉。", query: "好古園 活水軒 兵庫県姫路市本町68" }
             ]
           },
           {
-            id: "d3-s3",
-            name: "神戶三宮午餐 (神戶牛鐵板燒)",
-            address: "兵庫県神戸市中央区北長狭通2丁目12-6 Kビル1F",
+            id: "d3-s2",
+            name: "神戶三宮午餐 (神戶牛鐵板燒 - 東行回程順路)",
+            address: "兵庫県神戸市中央区北長狭通2丁目12-6",
             lat: 34.6943,
             lng: 135.1955,
             icon: "fa-drumstick-bite",
             category: "food",
-            stayMins: 80,
-            travelMode: "步行爬坡沿北野坂",
-            travelMins: 15,
-            travelDetail: "三宮站沿北野坂步行約 12–15 分鐘抵達異人館街",
-            depTime: "12:15",
-            arrTime: "12:30",
-            note: "三宮站周邊推薦喜山、Mouriya 或 Steakland 午間優惠套餐。",
+            stayMins: 85,
+            travelMode: "JR 新快速 (姬路 ➔ 三之宮)",
+            travelMins: 40,
+            travelDetail: "姬路站搭乘 JR 新快速約 40 分抵達三之宮站，出站即達",
+            depTime: "11:30",
+            arrTime: "12:10",
+            note: "三宮站周邊推薦喜山、Mouriya 或 Steakland 午間優惠神戶牛套餐。",
             shops: [
               { id: "sh-19", name: "神戸牛 喜山 (Kiyama)", address: "兵庫県神戸市中央区北長狭通2丁目12-6 Kビル1F", icon: "fa-drumstick-bite", cat: "food", price: "$$$", desc: "A5 級神戶牛專門店，師傅鐵板現煎霜降牛排入口即化。", query: "神戸牛 喜山 兵庫県神戸市中央区北長狭通2-12-6" }
             ]
           },
           {
-            id: "d3-s4",
-            name: "北野異人館街 ＆ 北野天滿神社",
+            id: "d3-s3",
+            name: "北野異人館街 ＆ 北野天滿神社 (俯瞰神戶港)",
             address: "兵庫県神戸市中央区北野町3丁目3-1",
             lat: 34.7003,
             lng: 135.1903,
             icon: "fa-landmark",
             category: "sight",
             stayMins: 90,
-            travelMode: "散步下坡至元町 / 神戶港",
-            travelMins: 20,
-            travelDetail: "下山漫步至海濱公園欣賞夜景",
-            depTime: "14:15",
-            arrTime: "14:35",
-            note: "登上北野天滿神社鳥居階梯，俯瞰紅磚風見雞洋樓與神戶港海景同框絕景！",
+            travelMode: "沿北野坂步行",
+            travelMins: 15,
+            travelDetail: "三宮站沿北野坂緩坡漫步約 12-15 分抵達異人館街",
+            depTime: "13:50",
+            arrTime: "14:05",
+            note: "登上北野天滿神社鳥居階梯，俯瞰紅磚風見雞館與神戶港海景同框絕景！",
             shops: [
               { id: "sh-21", name: "星巴克 神戶北野異人館店", address: "兵庫県神戸市中央区北野町3-1-31", icon: "fa-mug-hot", cat: "cafe", price: "$", desc: "百年登錄有形文化財洋樓改建，保留木造復古氛圍。", query: "スターバックス コーヒー 神戸北野異人館店 兵庫県神戸市中央区北野町3-1-31" }
             ]
           },
           {
-            id: "d3-s5",
-            name: "神戶臨海樂園 ＆ 美利堅公園夜景 ➔ 回大阪",
+            id: "d3-s4",
+            name: "神戶臨海樂園 umie ＆ 美利堅公園港塔夜景",
             address: "兵庫県神戸市中央区東川崎町1丁目7-2",
             lat: 34.6792,
             lng: 135.1834,
             icon: "fa-camera",
             category: "sight",
-            stayMins: 80,
-            travelMode: "JR 新快速 (直達大阪站)",
-            travelMins: 25,
-            travelDetail: "JR 神戶站搭新快速至大阪站（約 25 分），轉御堂筋線回大國町",
-            depTime: "17:30",
-            arrTime: "18:00",
-            note: "欣賞全新點燈的神戶港塔（Port Tower）與紅色摩天輪夜景。",
+            stayMins: 85,
+            travelMode: "下坡散步 / 地鐵海邊線",
+            travelMins: 20,
+            travelDetail: "由北野散步下行至海濱美利堅公園欣賞神戶港塔夜景",
+            depTime: "16:00",
+            arrTime: "16:20",
+            note: "欣賞全新點燈的神戶港塔（Port Tower）與紅色摩天輪海灣夜景。",
             shops: [
               { id: "sh-23", name: "Umie MOSAIC 海景露台", address: "兵庫県神戸市中央区東川崎町1丁目6-1", icon: "fa-utensils", cat: "food", price: "$$", desc: "面海露台邊吃手作披薩邊賞遊輪港景。", query: "神戸ハーバーランド umie MOSAIC 兵庫県神戸市中央区東川崎町1丁目6-1" }
             ]
+          },
+          {
+            id: "d3-s5",
+            name: "神戶站搭 JR 新快速 ➔ 返回香榭麗大國 2",
+            address: "大阪府大阪市浪速区大国2丁目",
+            lat: 34.6548,
+            lng: 135.4983,
+            icon: "fa-house",
+            category: "lodging",
+            stayMins: 0,
+            travelMode: "JR 新快速 + 地鐵御堂筋線",
+            travelMins: 35,
+            travelDetail: "神戶站搭新快速直達大阪站（25分），轉御堂筋線直達大國町",
+            depTime: "18:30",
+            arrTime: "19:05",
+            note: "車程極順暢，提早回民宿好好休息，儲備明天環球影城體力。",
+            shops: []
           }
         ]
       },
       {
         day: 4,
-        title: "日本環球影城 USJ 全日狂歡",
-        theme: "任天堂世界・哈利波特・飛天翼龍震撼體驗",
-        desc: "清晨早起直奔 USJ！開園第一波衝進超級任天堂世界玩瑪利歐賽車，全日暢玩禁忌之旅與刺激遊樂設施。",
+        title: "日本環球影城 USJ 全日狂歡 ➔ CityWalk 晚餐慶功",
+        theme: "超級任天堂世界・哈利波特・飛天翼龍震撼體驗",
+        desc: "以民宿為起點清晨出發，開園第一波衝進超級任天堂世界玩瑪利歐賽車，全日暢玩禁忌之旅與刺激設施，傍晚於 CityWalk 享用晚餐慶功。",
         stops: [
           {
             id: "d4-s1",
-            name: "大國町 ➔ JR 今宮站 ➔ 環球影城站",
+            name: "香榭麗大國 2 起點 ➔ JR 今宮站直達環球影城",
             address: "大阪府大阪市此花区島屋6丁目2",
             lat: 34.6654,
             lng: 135.4323,
@@ -1125,18 +1142,18 @@
             category: "transit",
             stayMins: 10,
             travelMode: "JR 環狀線 + 櫻島線",
-            travelMins: 30,
+            travelMins: 28,
             travelDetail: "民宿步行 8 分至【JR 今宮站】，搭至西九條轉櫻島線直達 USJ",
-            depTime: "06:45",
-            arrTime: "07:15",
-            note: "香榭麗大國 2 離 JR 今宮站極近，約 30 分鐘即可抵達樂園大門口！",
+            depTime: "06:40",
+            arrTime: "07:08",
+            note: "民宿離 JR 今宮站極近，免轉多次車，約 30 分鐘直達樂園大門口！",
             shops: [
               { id: "sh-25", name: "Universal CityWalk 飯糰", address: "大阪府大阪市此花区島屋6丁目2-61", icon: "fa-bowl-rice", cat: "food", price: "$", desc: "入園前快速外帶現捏手做飯糰與熱咖啡充實體力。", query: "ユニバーサル・シティウォーク大阪" }
             ]
           },
           {
             id: "d4-s2",
-            name: "開園首衝：超級任天堂世界",
+            name: "開園首衝：超級任天堂世界 (瑪利歐賽車)",
             address: "大阪府大阪市此花区桜島2丁目1-33",
             lat: 34.6660,
             lng: 135.4300,
@@ -1155,7 +1172,7 @@
           },
           {
             id: "d4-s3",
-            name: "哈利波特禁忌之旅 ＆ 活米村",
+            name: "哈利波特魔法世界 (活米村 ＆ 禁忌之旅)",
             address: "大阪府大阪市此花区桜島2丁目1-33",
             lat: 34.6658,
             lng: 135.4345,
@@ -1165,8 +1182,8 @@
             travelMode: "園區步行",
             travelMins: 10,
             travelDetail: "穿過巨石陣森林，造訪白雪皚皚活米村與霍格華茲城堡",
-            depTime: "11:30",
-            arrTime: "11:40",
+            depTime: "11:20",
+            arrTime: "11:30",
             note: "體驗【哈利波特禁忌之旅 4K3D】，喝杯招牌冰涼奶油啤酒。",
             shops: [
               { id: "sh-28", name: "三根掃帚酒吧", address: "大阪府大阪市此花区桜島2丁目1-33 USJ ウィザーディング・ワールド・オブ・ハリー・ポッター内", icon: "fa-beer-mug-empty", cat: "food", price: "$$", desc: "必喝招牌「奶油啤酒」與英式烤雞餐盤。", query: "三本の箒 USJ" }
@@ -1174,33 +1191,86 @@
           },
           {
             id: "d4-s4",
-            name: "飛天翼龍 ＆ 小小兵樂園 ➔ 返回民宿",
+            name: "侏儸紀公園 (飛天翼龍) ＆ 小小兵樂園",
             address: "大阪府大阪市此花区桜島2丁目1-33",
             lat: 34.6645,
             lng: 135.4330,
             icon: "fa-camera",
             category: "sight",
-            stayMins: 200,
-            travelMode: "JR 櫻島線 + 環狀線",
-            travelMins: 30,
-            travelDetail: "閉園後搭 JR 經西九條回 JR 今宮站，步行回大國町民宿",
-            depTime: "14:30",
-            arrTime: "15:00",
-            note: "挑戰世界最長最陡懸吊式過山車【飛天翼龍】，善用 Single Rider 走道大幅省時。",
+            stayMins: 180,
+            travelMode: "園區步行",
+            travelMins: 10,
+            travelDetail: "挑戰世界最長最陡懸吊式過山車【飛天翼龍】",
+            depTime: "14:00",
+            arrTime: "14:10",
+            note: "善用 Single Rider 單人走道大幅省時，啃隻巨大燻烤火雞腿充飢。",
             shops: [
-              { id: "sh-30", name: "侏儸紀燻烤巨大火雞腿", address: "大阪府大阪市此花区桜島2丁目1-33 USJ ジュラシック・パーク内", icon: "fa-drumstick-bite", cat: "food", price: "$$", desc: "樂園必啃手拿美食！超大份量燻烤火雞腿，肉汁豐富飽足。", query: "フォッシル・フエルズ USJ" }
+              { id: "sh-30", name: "侏儸紀燻烤巨大火雞腿", address: "大阪府大阪市此花区桜島2丁目1-33 USJ ジュラシック・パーク内", icon: "fa-drumstick-bite", cat: "food", price: "$$", desc: "超大份量燻烤火雞腿，肉汁豐富飽足。", query: "フォッシル・フエルズ USJ" }
             ]
+          },
+          {
+            id: "d4-s5",
+            name: "Universal CityWalk 晚餐慶功 ➔ 返回民宿",
+            address: "大阪府大阪市此花区島屋6丁目2-61",
+            lat: 34.6675,
+            lng: 135.4360,
+            icon: "fa-utensils",
+            category: "food",
+            stayMins: 80,
+            travelMode: "JR 櫻島線 + 環狀線",
+            travelMins: 28,
+            travelDetail: "搭 JR 由西九條直達 JR 今宮站，步行 8 分回民宿",
+            depTime: "18:10",
+            arrTime: "18:38",
+            note: "CityWalk 享用神戶元町炸豬排或章魚燒博物館，慶祝 USJ 完美達標。",
+            shops: []
+          },
+          {
+            id: "d4-s6",
+            name: "返回香榭麗大國 2 民宿",
+            address: "大阪府大阪市浪速区大国2丁目",
+            lat: 34.6548,
+            lng: 135.4983,
+            icon: "fa-house",
+            category: "lodging",
+            stayMins: 0,
+            travelMode: "步行",
+            travelMins: 5,
+            travelDetail: "步行回民宿整理戰利品",
+            depTime: "20:00",
+            arrTime: "20:05",
+            note: "將行李箱打理妥當，預留空間給明天的臨空城 Outlet 大血拚。",
+            shops: []
           }
         ]
       },
       {
         day: 5,
-        title: "海濱 Outlet 採購 ＆ 6分鐘直達機場返台",
-        theme: "臨空城名品血拚・6分鐘電車直達KIX",
-        desc: "大國町退房出發，南海電鐵直達關西最大海濱臨空城 Outlet 大採購，寄放行李血拚完畢後，搭電車 1 站（6分鐘）直抵關西機場登機！",
+        title: "木津市場海鮮早餐 ➔ 臨空城 Outlet ➔ 6分鐘直達機場返台",
+        theme: "木津海鮮丼・臨空城名品血拚・6分鐘電車直達KIX",
+        desc: "以民宿為起點，早晨步行3分造訪木津市場享用現切刺身海鮮丼，搭南海電鐵直達臨空城寄放行李大採購，搭電車1站（6分鐘跨海大橋）直達關西機場登機！",
         stops: [
           {
             id: "d5-s1",
+            name: "木津卸売市場 (民宿步行3分！現切生魚片海鮮丼早餐)",
+            address: "大阪府大阪市浪速区敷津東2丁目2-8",
+            lat: 34.6568,
+            lng: 135.5002,
+            icon: "fa-bowl-rice",
+            category: "food",
+            stayMins: 65,
+            travelMode: "步行",
+            travelMins: 4,
+            travelDetail: "民宿步行 3-4 分鐘直達市場入口",
+            depTime: "08:30",
+            arrTime: "08:34",
+            note: "大阪超過三百年批發市場，品嚐當日現撈生魚片丼飯、海膽與香甜草莓水果。",
+            shops: [
+              { id: "sh-30b", name: "魚市食堂 木津市場店", address: "大阪府大阪市浪速区敷津東2丁目2-8", icon: "fa-bowl-rice", cat: "food", price: "$$", desc: "新鮮爆量海鮮丼名店，鮪魚大腹、鮭魚卵鋪滿整碗。", query: "魚市食堂 木津市場" }
+            ]
+          },
+          {
+            id: "d5-s2",
             name: "香榭麗大國 2 退房 ➔ 南海電鐵直達臨空城",
             address: "大阪府大阪市浪速区大国2丁目",
             lat: 34.6548,
@@ -1209,17 +1279,17 @@
             category: "transit",
             stayMins: 15,
             travelMode: "南海電鐵 空港急行",
-            travelMins: 40,
-            travelDetail: "大國町搭地鐵1站至難波，搭【南海空港急行】直達臨空城站（約 38 分）",
-            depTime: "09:30",
-            arrTime: "10:10",
-            note: "臨空城站出站走天橋 6 分鐘直達 Outlet，車站與 Outlet 均設有大型行李櫃。",
+            travelMins: 38,
+            travelDetail: "大國町搭地鐵1站至難波，搭【南海空港急行】直達臨空城站（約 36 分）",
+            depTime: "09:50",
+            arrTime: "10:28",
+            note: "臨空城站出站走天橋 6 分鐘直達 Outlet，車站與服務中心均設有大型行李櫃。",
             shops: [
               { id: "sh-31", name: "臨空城 遊客服務中心寄物處", address: "大阪府泉佐野市りんくう往来南3-28", icon: "fa-suitcase-rolling", cat: "goods", price: "$", desc: "置物櫃滿載時，可至服務處人工寄放大件行李箱。", query: "りんくうプレミアム・アウトレット インフォメーションセンター" }
             ]
           },
           {
-            id: "d5-s2",
+            id: "d5-s3",
             name: "臨空城 Outlet (Rinku Premium Outlets) 大採購",
             address: "大阪府泉佐野市りんくう往来南3-28",
             lat: 34.4072,
@@ -1230,16 +1300,16 @@
             travelMode: "園區步行",
             travelMins: 10,
             travelDetail: "坐擁大阪灣海景，分為 Main 棟與 Seaside 棟",
-            depTime: "10:30",
-            arrTime: "10:40",
-            note: "Adidas、Nike、Snow Peak、BEAMS 折扣高，出示護照領優惠券。",
+            depTime: "10:45",
+            arrTime: "10:55",
+            note: "Adidas、Nike、Snow Peak、BEAMS、Skechers 折扣高，出示護照領優惠券。",
             shops: [
               { id: "sh-32", name: "Snow Peak Cafe 臨空店", address: "大阪府泉佐野市りんくう往来南3-28 シーサイドエリア 1F", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "海景露營風咖啡館，品嚐滴漏單品咖啡與厚鬆餅。", query: "スノーピーク 大阪府泉佐野市りんくう往来南3-28" }
             ]
           },
           {
-            id: "d5-s3",
-            name: "臨空城站 ➔ 關西國際機場 (KIX) 【關鍵 6 分鐘】",
+            id: "d5-s4",
+            name: "臨空城站 ➔ 關西國際機場 (KIX) 【關鍵 1 站 6 分鐘】",
             address: "大阪府泉佐野市りんくう往来北1",
             lat: 34.4110,
             lng: 135.2995,
@@ -1249,15 +1319,15 @@
             travelMode: "南海急行 / JR關空快速 (僅1站)",
             travelMins: 6,
             travelDetail: "走回臨空城站，刷卡搭南海急行或 JR 關空快速【跨海大橋 1 站 6 分鐘直達】",
-            depTime: "14:10",
-            arrTime: "14:16",
+            depTime: "14:15",
+            arrTime: "14:21",
             note: "車程只需 5～6 分鐘，不塞車超準點，不用在市區提戰利品轉車！",
             shops: [
               { id: "sh-34", name: "KIX 免稅店伴手禮大街", address: "大阪府泉佐野市泉州空港北1 関西国際空港 第1ターミナル3F 出国エリア", icon: "fa-bag-shopping", cat: "goods", price: "$$", desc: "入關後購買薯條三兄弟、白色戀人、ROYCE生巧克力。", query: "関西国際空港 第1ターミナル 免税店" }
             ]
           },
           {
-            id: "d5-s4",
+            id: "d5-s5",
             name: "關西國際機場辦理退稅、登機 ➔ 平安返台",
             address: "大阪府泉佐野市泉州空港北1",
             lat: 34.4320,
@@ -1268,8 +1338,8 @@
             travelMode: "國際航班",
             travelMins: 0,
             travelDetail: "T1 直接由二樓出站走空橋進報到大廳；T2 搭 Aeroplaza 接駁車",
-            depTime: "14:30",
-            arrTime: "16:30",
+            depTime: "14:35",
+            arrTime: "16:35",
             note: "起飛前至少 2.5 小時抵達機場報到出關，退稅並做最後免稅品補貨。",
             shops: [
               { id: "sh-35", name: "町家小路 (KIX美食街)", address: "大阪府泉佐野市泉州空港北1 関西国際空港 第1ターミナル2F", icon: "fa-bowl-rice", cat: "food", price: "$$", desc: "出關前最後品嚐道地烏龍麵與日式炸蝦丼飯。", query: "町家小路 関西国際空港 第1ターミナル2F" }
@@ -1303,49 +1373,6 @@
         Math.sin(dLon/2) * Math.sin(dLon/2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
       return Number((R * c).toFixed(1));
-    }
-
-    function optimizeRouteForDay(dayIndex, notify = true) {
-      const day = appData[dayIndex];
-      if (!day || !day.stops || day.stops.length <= 2) {
-        if (day && day.stops) updateChainedScheduleForDay(day);
-        saveData(false);
-        renderTimeline();
-        if (notify) showToast("景點數量較少，已完成時間推算！");
-        return;
-      }
-
-      const origin = day.stops[0];
-      const unvisited = day.stops.slice(1);
-      const optimized = [origin];
-      let currentSpot = origin;
-
-      while (unvisited.length > 0) {
-        let nearestIdx = 0;
-        let shortestDist = Infinity;
-
-        for (let i = 0; i < unvisited.length; i++) {
-          const candidate = unvisited[i];
-          let dist = calculateDistanceKm(currentSpot.lat, currentSpot.lng, candidate.lat, candidate.lng);
-          if (!candidate.lat || !candidate.lng) dist = 9999 + i;
-
-          if (dist < shortestDist) {
-            shortestDist = dist;
-            nearestIdx = i;
-          }
-        }
-
-        const nextSpot = unvisited.splice(nearestIdx, 1)[0];
-        optimized.push(nextSpot);
-        currentSpot = nextSpot;
-      }
-
-      day.stops = optimized;
-      updateChainedScheduleForDay(day);
-      saveData(false);
-      renderTimeline();
-      renderShops();
-      if (notify) showToast("已成功依距離與最佳路徑完成排序與時刻重算！");
     }
 
     function updateChainedScheduleForDay(day) {
@@ -1996,7 +2023,6 @@
       document.getElementById('formStopNote').value = '';
       document.getElementById('formStopIcon').value = 'fa-location-dot';
       document.getElementById('deleteStopBtn').classList.add('hidden');
-      document.getElementById('autoSortCheckboxContainer').classList.remove('hidden');
 
       const dropEl = document.getElementById('autocompleteDropdown');
       if (dropEl) dropEl.classList.add('hidden');
@@ -2024,7 +2050,6 @@
       const chosenIcon = stop.icon || 'fa-location-dot';
       document.getElementById('formStopIcon').value = chosenIcon;
       document.getElementById('deleteStopBtn').classList.remove('hidden');
-      document.getElementById('autoSortCheckboxContainer').classList.add('hidden');
 
       const dropEl = document.getElementById('autocompleteDropdown');
       if (dropEl) dropEl.classList.add('hidden');
@@ -2037,7 +2062,6 @@
       if (e) e.preventDefault();
       const currentDay = appData[currentDayIndex];
       const stopId = document.getElementById('formStopId').value;
-      const autoSort = document.getElementById('formAutoSortOnAdd') ? document.getElementById('formAutoSortOnAdd').checked : false;
 
       const rawLat = document.getElementById('formStopLat').value;
       const rawLng = document.getElementById('formStopLng').value;
@@ -2078,18 +2102,14 @@
           shops: []
         };
         currentDay.stops.push(newStop);
-        if (autoSort && stopData.lat && stopData.lng) {
-          optimizeRouteForDay(currentDayIndex, false);
-        } else {
-          updateChainedScheduleForDay(currentDay);
-        }
+        updateChainedScheduleForDay(currentDay);
       }
 
       saveData();
       document.getElementById('stopModal').classList.add('hidden');
       renderTimeline();
       renderShops();
-      showToast(autoSort && !stopId ? "已依距離自動排入最佳順序！" : "景點節點已儲存！");
+      showToast("景點節點已儲存！");
     }
 
     function handleDeleteStop() {
@@ -2354,13 +2374,6 @@
     }
 
     function setupEventListeners() {
-      document.getElementById('optimizeRouteBtn').addEventListener('click', () => {
-        optimizeRouteForDay(currentDayIndex, true);
-      });
-      document.getElementById('mobileOptimizeRouteBtn').addEventListener('click', () => {
-        optimizeRouteForDay(currentDayIndex, true);
-      });
-
       document.getElementById('quickPresetFillBtn').addEventListener('click', () => {
         const queryName = document.getElementById('formStopName').value.trim();
         let match = POPULAR_LOCATIONS.find(loc => queryName && loc.name.includes(queryName));
