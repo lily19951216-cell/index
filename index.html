@@ -156,7 +156,7 @@
             <h1 class="text-xs sm:text-sm font-extrabold tracking-tight truncate leading-tight">大阪・關西 隨行助手</h1>
             <span id="saveStatusBadge" class="hidden sm:inline-flex text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 items-center gap-1 flex-shrink-0">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              本機已儲存
+              本機與網址已同步
             </span>
           </div>
           <p class="text-[9.5px] sm:text-[10px] text-slate-500 dark:text-slate-400 truncate leading-tight">
@@ -166,7 +166,12 @@
       </div>
 
       <div class="flex items-center gap-1 flex-shrink-0">
-        <!-- Palette theme switcher -->
+        <!-- Share Latest Link Button -->
+        <button id="shareLinkBtn" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 flex items-center gap-1 active:scale-95 transition" title="複製最新行程網址">
+          <i class="fa-solid fa-share-nodes text-[9px]"></i>
+          <span class="hidden xs:inline">分享網址</span>
+        </button>
+
         <button id="themeToggleBtn" class="px-2 py-1 rounded-lg text-[10px] font-bold theme-primary-light-bg theme-primary-text border theme-primary-border flex items-center gap-1 active:scale-95 transition" title="切換配色">
           <i class="fa-solid fa-palette text-[9px]"></i>
           <span class="hidden xs:inline">配色</span>
@@ -183,7 +188,6 @@
       </div>
     </div>
 
-    <!-- Theme Palette Selector Bar -->
     <div id="themePaletteBar" class="hidden border-t theme-card-border px-2.5 py-1 bg-slate-50/90 dark:bg-slate-900/90 transition-all">
       <div class="w-full flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
         <span class="text-[9px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1 flex-shrink-0">風格：</span>
@@ -213,14 +217,13 @@
     <!-- 5-Day Horizontal Switcher Bar -->
     <div class="border-t theme-card-border px-2 py-1 bg-white/40 dark:bg-slate-900/40">
       <div class="w-full flex items-center overflow-x-auto no-scrollbar gap-1" id="dayTabsList">
-        <!-- Populated by JS -->
       </div>
     </div>
   </header>
 
   <main class="flex-1 w-full max-w-6xl mx-auto px-1.5 sm:px-4 py-2 sm:py-3">
     
-    <!-- Day Overview Banner with Smart Distance Sort & Time Recalculation -->
+    <!-- Day Overview Banner -->
     <div class="theme-card-bg rounded-xl p-2.5 sm:p-3.5 border theme-card-border shadow-xs mb-2 transition-colors">
       <div class="flex items-center justify-between gap-1.5 flex-wrap">
         <div class="min-w-0 flex-1">
@@ -231,13 +234,14 @@
           <h2 id="currentDayTitle" class="text-xs sm:text-base font-black mt-0.5 truncate leading-tight">抵達大阪 ＆ 悠閒住吉大社巡禮</h2>
         </div>
 
-        <!-- Smart Route Optimization & Tools Bar -->
         <div class="flex items-center gap-1 flex-shrink-0 flex-wrap">
-          <button id="recalcTimesBtn" class="px-2 py-1 text-[10.5px] font-bold rounded-lg text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center gap-1 active:scale-95 transition" title="重新鏈結推算時間">
+          <!-- Recalculate Time Forward -->
+          <button id="recalcTimesBtn" class="px-2.5 py-1 text-[10.5px] font-bold rounded-lg text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center gap-1 active:scale-95 transition" title="重新鏈結推算時間">
             <i class="fa-solid fa-clock-rotate-left text-[10px]"></i>
-            <span class="hidden xs:inline">順推時間</span>
+            <span>順推時間</span>
           </button>
 
+          <!-- Add Spot Quick Header Button -->
           <button id="addStopHeaderBtn" class="px-2.5 py-1 text-[10.5px] font-black rounded-lg text-white theme-primary-bg theme-primary-hover flex items-center gap-1 shadow-xs active:scale-95 transition">
             <i class="fa-solid fa-plus text-[10px]"></i>
             <span>加景點</span>
@@ -260,15 +264,14 @@
             <span>路線行程節點</span>
             <span id="stopsCountBadge" class="px-1.5 py-0.2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-[9px] font-mono">0</span>
           </div>
-          <span class="text-[9.5px] text-slate-400">各站顯示相對出發點之里程 (km)・點擊直達 Google Maps</span>
+          <span class="text-[9.5px] text-slate-400">點擊里程/起點按鈕直接開啟 Google Maps</span>
         </div>
 
         <div id="timelineContainer" class="space-y-1.5 sm:space-y-2 w-full">
-          <!-- Timeline stop cards injected by JS -->
         </div>
       </section>
 
-      <!-- Right: Street Shops (Desktop Column / Mobile Bottom Drawer) -->
+      <!-- Right: Street Shops -->
       <section id="shopsDrawerContainer" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-xs lg:static lg:bg-transparent lg:backdrop-blur-none lg:z-auto lg:col-span-5 hidden lg:block transition-opacity">
         <div class="fixed bottom-0 left-0 right-0 max-h-[82vh] h-full lg:max-h-none lg:h-auto lg:static theme-card-bg rounded-t-2xl lg:rounded-xl border-t lg:border theme-card-border shadow-xl lg:shadow-xs flex flex-col overflow-hidden pb-safe transition-colors">
           
@@ -305,7 +308,13 @@
 
           <!-- Shops List Scroll Area -->
           <div id="shopsListContainer" class="p-2 space-y-1.5 overflow-y-auto max-h-[500px] divide-y divide-slate-100 dark:divide-slate-800/80 flex-1">
-            <!-- Injected by JS -->
+          </div>
+
+          <div class="p-2 border-t theme-card-border bg-slate-50 dark:bg-slate-900/50 text-center flex-shrink-0">
+            <a id="searchTargetGoogleMapBtn" href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-1 text-[11px] theme-primary-text font-bold">
+              <span>在 Google Maps 探索周邊全景</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
           </div>
 
         </div>
@@ -352,12 +361,11 @@
       <form id="stopForm" class="p-3.5 space-y-3 overflow-y-auto flex-1 text-xs">
         <input type="hidden" id="formStopId">
 
-        <!-- Spot Name with Quick Preset Coordinates Picker & Live Autocomplete -->
         <div class="relative">
           <div class="flex items-center justify-between mb-1">
             <label class="block font-bold">景點 / 站點名稱 *</label>
             <span class="text-[9.5px] text-indigo-600 dark:text-indigo-400 font-semibold cursor-pointer" id="quickPresetFillBtn">
-              <i class="fa-solid fa-wand-magic-sparkles mr-0.5"></i>快速套用熱門座標與地址
+              <i class="fa-solid fa-wand-magic-sparkles mr-0.5"></i>快速套用熱門景點
             </span>
           </div>
           <div class="relative">
@@ -367,26 +375,23 @@
             </span>
           </div>
           <div id="autocompleteDropdown" class="absolute left-0 right-0 top-full mt-1 theme-card-bg border theme-card-border rounded-lg shadow-xl z-50 max-h-48 overflow-y-auto hidden">
-            <!-- Results injected here -->
           </div>
         </div>
 
-        <!-- Address Field for Google Maps Direct Linking -->
         <div>
           <label class="block font-bold mb-1 flex items-center justify-between">
-            <span>詳細地址 (Google Maps 導航優先使用)</span>
-            <span class="text-[9px] text-emerald-600 dark:text-emerald-400 font-normal">精確定位地標</span>
+            <span>詳細地址 (用於精準連結 Google Maps)</span>
+            <span class="text-[9px] text-slate-400 font-normal">日本實體地址</span>
           </label>
-          <input type="text" id="formStopAddress" placeholder="例如：大阪府大阪市住吉区住吉2丁目9-89" class="w-full px-2.5 py-1.5 border theme-card-border rounded-lg bg-transparent text-xs font-medium">
+          <input type="text" id="formStopAddress" placeholder="例如：大阪府大阪市住吉區住吉2丁目9-89" class="w-full px-2.5 py-1.5 border theme-card-border rounded-lg bg-transparent font-medium">
         </div>
 
-        <!-- Coordinates Container for Distance Calculations -->
         <div class="p-2.5 bg-indigo-50/60 dark:bg-indigo-950/30 rounded-lg border border-indigo-200 dark:border-indigo-900/50 space-y-1.5">
           <div class="flex items-center justify-between">
             <label class="block font-bold text-[10.5px] text-indigo-900 dark:text-indigo-300">
-              <i class="fa-solid fa-crosshairs mr-1"></i>地理座標 (用於計算各站里程)
+              <i class="fa-solid fa-crosshairs mr-1"></i>地理座標 (用於里程計算)
             </label>
-            <span class="text-[9px] text-indigo-500">支援自動補全與自訂</span>
+            <span class="text-[9px] text-indigo-500">選填 / 自動補全</span>
           </div>
           <div class="grid grid-cols-2 gap-1.5">
             <div>
@@ -400,14 +405,12 @@
           </div>
         </div>
 
-        <!-- Icon Picker for Stop -->
         <div>
           <label class="block font-bold mb-1 flex items-center justify-between">
             <span>代表 Icon 圖示</span>
             <span class="text-[9px] text-slate-400 font-normal">點選即可套用</span>
           </label>
           <div class="grid grid-cols-7 sm:grid-cols-9 gap-1 p-1 bg-slate-50 dark:bg-slate-900/60 rounded-lg border theme-card-border max-h-20 overflow-y-auto no-scrollbar" id="stopIconGrid">
-            <!-- Injected by JS -->
           </div>
           <input type="hidden" id="formStopIcon" value="fa-location-dot">
         </div>
@@ -440,7 +443,7 @@
         </div>
 
         <div class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-lg border theme-card-border space-y-1.5">
-          <label class="block font-bold text-[10.5px]">交通方式與車程描述 (選填 / 最佳化時自動估算)</label>
+          <label class="block font-bold text-[10.5px]">交通方式與車程描述 (選填)</label>
           <div class="grid grid-cols-2 gap-1.5">
             <input type="text" id="formStopTravelMode" placeholder="如：大阪地鐵 / JR 新快速" class="px-2 py-1 border theme-card-border rounded text-xs bg-white dark:bg-slate-800">
             <input type="number" id="formStopTravelMins" placeholder="車程分鐘 (如 25)" min="0" class="px-2 py-1 border theme-card-border rounded text-xs bg-white dark:bg-slate-800">
@@ -485,15 +488,12 @@
       </div>
 
       <div class="p-3.5 space-y-3 overflow-y-auto flex-1 text-xs">
-        
-        <!-- Member Management -->
         <div class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-lg border theme-card-border space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="font-bold text-[11px] text-slate-700 dark:text-slate-300">同行旅伴成員</span>
             <span class="text-[9px] text-slate-400">點擊 × 移除</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap" id="membersChipsContainer">
-            <!-- Injected by JS -->
           </div>
           <div class="flex gap-1 pt-1">
             <input type="text" id="newMemberInput" placeholder="輸入旅伴名字 (如: 小明)" class="flex-1 px-2 py-1 text-xs border theme-card-border rounded bg-white dark:bg-slate-800">
@@ -501,7 +501,6 @@
           </div>
         </div>
 
-        <!-- Add Expense Form -->
         <form id="addExpenseForm" class="p-2.5 bg-white dark:bg-slate-800/80 rounded-lg border theme-card-border space-y-2">
           <h4 class="font-bold text-[11px] text-emerald-700 dark:text-emerald-300 flex items-center gap-1">
             <i class="fa-solid fa-plus-circle"></i> 新增一筆先代墊消費
@@ -524,7 +523,6 @@
             <div>
               <label class="block text-[9.5px] text-slate-400 font-bold mb-0.5">誰先代墊？</label>
               <select id="expensePayer" class="w-full px-2 py-1 text-xs border theme-card-border rounded bg-transparent font-semibold">
-                <!-- Members options injected -->
               </select>
             </div>
             <div>
@@ -536,7 +534,6 @@
           <div>
             <label class="block text-[9.5px] text-slate-400 font-bold mb-0.5">分攤對象 (預設全員平分)</label>
             <div class="flex items-center gap-2 flex-wrap" id="splitParticipantsCheckboxes">
-              <!-- Checkboxes for who participates -->
             </div>
           </div>
 
@@ -545,7 +542,6 @@
           </button>
         </form>
 
-        <!-- Settlement Result Card -->
         <div class="p-2.5 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-lg border border-emerald-200 dark:border-emerald-800/40 space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="font-bold text-[11px] text-emerald-800 dark:text-emerald-300">
@@ -557,18 +553,15 @@
             </button>
           </div>
           <div id="settlementDebtsList" class="space-y-1 text-xs">
-            <!-- Debt lines injected -->
           </div>
         </div>
 
-        <!-- Recorded Expenses History -->
         <div class="space-y-1">
           <div class="flex items-center justify-between">
             <span class="font-bold text-[10.5px] text-slate-500">已記錄開銷列表</span>
             <span id="expensesTotalBadge" class="text-[10px] font-mono text-slate-400">總計 0 筆</span>
           </div>
           <div id="expensesHistoryList" class="space-y-1 max-h-36 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/80">
-            <!-- Injected by JS -->
           </div>
         </div>
 
@@ -596,7 +589,6 @@
         <div>
           <label class="block font-bold mb-1">關聯行程景點 *</label>
           <select id="formShopStopTarget" required class="w-full px-2.5 py-1.5 border theme-card-border rounded-lg bg-transparent font-semibold">
-            <!-- Populated dynamically -->
           </select>
         </div>
 
@@ -606,8 +598,8 @@
         </div>
 
         <div>
-          <label class="block font-bold mb-1">店家詳細地址 (Google Maps 導航優先使用)</label>
-          <input type="text" id="formShopAddress" placeholder="例如：兵庫県神戸市中央区北野町3-1-31" class="w-full px-2.5 py-1.5 border theme-card-border rounded-lg bg-transparent text-xs font-medium">
+          <label class="block font-bold mb-1">店家詳細地址 (用於導航)</label>
+          <input type="text" id="formShopAddress" placeholder="如：兵庫県神戸市中央区北野町3-1-31" class="w-full px-2.5 py-1.5 border theme-card-border rounded-lg bg-transparent text-xs">
         </div>
 
         <div>
@@ -616,7 +608,6 @@
             <span class="text-[9px] text-slate-400 font-normal">點選切換</span>
           </label>
           <div class="grid grid-cols-7 gap-1 p-1 bg-slate-50 dark:bg-slate-900/60 rounded-lg border theme-card-border max-h-20 overflow-y-auto no-scrollbar" id="shopIconGrid">
-            <!-- Injected by JS -->
           </div>
           <input type="hidden" id="formShopIcon" value="fa-utensils">
         </div>
@@ -646,11 +637,6 @@
           <textarea id="formShopDesc" rows="2" placeholder="特色招牌、必點人氣品項、排隊提醒等..." class="w-full px-2.5 py-1.5 border theme-card-border rounded-lg bg-transparent text-xs"></textarea>
         </div>
 
-        <div>
-          <label class="block font-bold mb-1">Google Maps 搜尋關鍵字或店名</label>
-          <input type="text" id="formShopQuery" placeholder="如：Starbucks Coffee Kobe Kitano" class="w-full px-2.5 py-1.5 border theme-card-border rounded-lg bg-transparent text-xs font-medium">
-        </div>
-
         <div class="pt-2 border-t theme-card-border flex items-center justify-between">
           <button type="button" id="deleteShopBtn" class="text-xs font-bold text-rose-600 hover:text-rose-700 hidden flex items-center gap-1 py-1">
             <i class="fa-solid fa-trash-can"></i>
@@ -672,16 +658,21 @@
           <div class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center text-xs">
             <i class="fa-solid fa-database"></i>
           </div>
-          <h3 id="dataModalTitle" class="text-xs sm:text-sm font-bold">行程與分帳備份管理</h3>
+          <h3 id="modalLabel" class="text-xs sm:text-sm font-bold">行程與分帳備份管理</h3>
         </div>
         <button id="closeDataModalBtn" class="p-1 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-base"></i></button>
       </div>
 
       <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-[11px]">
-        所有自訂景點、座標、街邊店與代墊記帳均即時保存在手機中。匯出 JSON 可隨時 AirDrop 或傳到 LINE。
+        所有修改皆會即時寫入本機與網址列。點擊下方按鈕可快速複製攜帶最新內容的專屬連結。
       </p>
 
       <div class="space-y-1.5">
+        <button id="copyShareLinkInModalBtn" class="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center justify-center gap-1.5 transition">
+          <i class="fa-solid fa-link text-xs"></i>
+          <span>複製最新同步網址 (傳給旅伴)</span>
+        </button>
+
         <button id="exportJsonBtn" class="w-full py-2 px-3 theme-primary-light-bg theme-primary-text rounded-lg font-bold flex items-center justify-center gap-1.5 transition">
           <i class="fa-solid fa-download text-xs"></i>
           <span>匯出完整行程備份 (JSON)</span>
@@ -716,26 +707,20 @@
     const THEME_KEY = "osaka_theme_v6";
 
     const POPULAR_LOCATIONS = [
-      { name: "香榭麗大國 2 (大國町民宿)", address: "大阪府大阪市浪速区大国2丁目", lat: 34.6548, lng: 135.4983, icon: "fa-hotel", category: "lodging" },
-      { name: "大國町站", address: "大阪府大阪市浪速区大国3丁目", lat: 34.6545, lng: 135.4975, icon: "fa-train", category: "transit" },
-      { name: "木津卸売市場", address: "大阪府大阪市浪速区敷津東2丁目2-8", lat: 34.6568, lng: 135.5002, icon: "fa-bowl-rice", category: "food" },
+      { name: "香榭麗大國 2 (大國町民宿)", address: "大阪府大阪市浪速区大国2-4-15", lat: 34.6548, lng: 135.4983, icon: "fa-hotel", category: "lodging" },
+      { name: "木津卸売市場 (木津批發市場)", address: "大阪府大阪市浪速区敷津東2丁目2-8", lat: 34.6575, lng: 135.4998, icon: "fa-bowl-rice", category: "food" },
       { name: "住吉大社", address: "大阪府大阪市住吉区住吉2丁目9-89", lat: 34.6133, lng: 135.4929, icon: "fa-torii-gate", category: "sight" },
-      { name: "道頓堀 固力果跑跑人", address: "大阪府大阪市中央区道頓堀1丁目10-3", lat: 34.6687, lng: 135.5013, icon: "fa-camera", category: "sight" },
       { name: "焼肉㐂舌 南船場店 (心齋橋)", address: "大阪府大阪市中央区南船場4丁目11-22", lat: 34.6775, lng: 135.5015, icon: "fa-drumstick-bite", category: "food" },
-      { name: "あぶりや 千日前店 (難波)", address: "大阪府大阪市中央区難波3丁目4-16", lat: 34.6661, lng: 135.5034, icon: "fa-drumstick-bite", category: "food" },
-      { name: "通天閣 / 新世界", address: "大阪府大阪市浪速区恵美須東1丁目18-6", lat: 34.6525, lng: 135.5063, icon: "fa-landmark", category: "sight" },
-      { name: "大阪城天守閣", address: "大阪府大阪市中央区大阪城1-1", lat: 34.6873, lng: 135.5262, icon: "fa-fort-awesome", category: "sight" },
-      { name: "勝尾寺 (滿山達摩)", address: "大阪府箕面市勝尾寺", lat: 34.8601, lng: 135.4912, icon: "fa-torii-gate", category: "sight" },
+      { name: "道頓堀 固力果跑跑人", address: "大阪府大阪市中央区道頓堀1丁目10-3", lat: 34.6687, lng: 135.5013, icon: "fa-camera", category: "sight" },
+      { name: "勝尾寺 (滿山達摩)", address: "大阪府箕面市粟生間谷2914-1", lat: 34.8601, lng: 135.4912, icon: "fa-torii-gate", category: "sight" },
       { name: "箕面瀑布", address: "大阪府箕面市箕面公園2-2", lat: 34.8488, lng: 135.4746, icon: "fa-mountain-sun", category: "sight" },
-      { name: "Minoh Q's MALL", address: "大阪府箕面市西宿1丁目17-22", lat: 34.8340, lng: 135.4890, icon: "fa-bag-shopping", category: "food" },
       { name: "朝日啤酒吹田工廠", address: "大阪府吹田市西の庄町1-45", lat: 34.7610, lng: 135.5218, icon: "fa-beer-mug-empty", category: "sight" },
       { name: "梅田藍天大廈空中庭園", address: "大阪府大阪市北区大淀中1丁目1-88", lat: 34.7059, lng: 135.4897, icon: "fa-camera", category: "sight" },
       { name: "國寶姬路城 (白鷺城)", address: "兵庫県姫路市本町68", lat: 34.8394, lng: 134.6939, icon: "fa-fort-awesome", category: "sight" },
-      { name: "神戶三宮站 (神戶牛午餐)", address: "兵庫県神戸市中央区北長狭通2丁目12-6", lat: 34.6943, lng: 135.1955, icon: "fa-drumstick-bite", category: "food" },
-      { name: "北野異人館街 ＆ 天滿神社", address: "兵庫県神戸市中央区北野町3丁目3-1", lat: 34.7003, lng: 135.1903, icon: "fa-landmark", category: "sight" },
+      { name: "神戸牛 喜山 (三宮)", address: "兵庫県神戸市中央区北長狭通2丁目12-6", lat: 34.6943, lng: 135.1955, icon: "fa-drumstick-bite", category: "food" },
+      { name: "北野異人館街", address: "兵庫県神戸市中央区北野町", lat: 34.7003, lng: 135.1903, icon: "fa-landmark", category: "sight" },
       { name: "神戶臨海樂園 umie", address: "兵庫県神戸市中央区東川崎町1丁目7-2", lat: 34.6792, lng: 135.1834, icon: "fa-camera", category: "sight" },
       { name: "日本環球影城 (USJ)", address: "大阪府大阪市此花区桜島2丁目1-33", lat: 34.6654, lng: 135.4323, icon: "fa-ticket", category: "sight" },
-      { name: "Universal CityWalk", address: "大阪府大阪市此花区島屋6丁目2-61", lat: 34.6675, lng: 135.4360, icon: "fa-utensils", category: "food" },
       { name: "臨空城 Outlet (Rinku)", address: "大阪府泉佐野市りんくう往来南3-28", lat: 34.4072, lng: 135.2952, icon: "fa-bag-shopping", category: "sight" },
       { name: "關西國際機場 (KIX)", address: "大阪府泉佐野市泉州空港北1", lat: 34.4320, lng: 135.2304, icon: "fa-plane-departure", category: "transit" }
     ];
@@ -764,85 +749,85 @@
     const DEFAULT_ITINERARY_DATA = [
       {
         day: 1,
-        title: "抵達關西 ➔ 放行李 ➔ 住吉大社 ＆ 心齋橋和牛",
-        theme: "南大阪歷史・道頓堀夜景・極上熟成和牛",
-        desc: "以關西機場為起點，直達大國町放行李後南下住吉大社祈願，再一路北順至道頓堀與心齋橋享用燒肉晚餐。",
+        title: "抵達大阪 ＆ 悠閒住吉大社巡禮",
+        theme: "南大阪歷史・極上熟成和牛",
+        desc: "抵達後先至民宿放置行李，隨後南下走訪千年住吉大社反橋洗滌身心，傍晚漫步道頓堀，品嚐極上熟成黑毛和牛燒肉。",
         stops: [
           {
             id: "d1-s1",
-            name: "關西機場 (KIX) ➔ 南海空港急行出發",
+            name: "關西國際機場 (KIX)",
             address: "大阪府泉佐野市泉州空港北1",
             lat: 34.4320,
             lng: 135.2304,
             icon: "fa-plane-departure",
             category: "transit",
-            stayMins: 15,
+            stayMins: 20,
             travelMode: "南海電鐵 空港急行",
             travelMins: 45,
-            travelDetail: "搭南海急行至新今宮，轉地鐵1站至大國町",
+            travelDetail: "搭南海空港急行至新今宮，轉地鐵1站至大國町",
             depTime: "14:00",
             arrTime: "14:45",
-            note: "出關後直接刷 iPhone Suica/ICOCA 快速進站乘車。",
+            note: "出關後直接感應 iPhone Suica/ICOCA 快速進站乘車。",
             shops: [
-              { id: "sh-1", name: "551蓬萊 關西機場店", address: "大阪府泉佐野市泉州空港北1 関西国際空港 第1ターミナル2F", icon: "fa-bowl-rice", cat: "food", price: "$", desc: "大阪必吃招牌現蒸肉包，出關即時充飢。", query: "551蓬萊 関西国際空港 第1ターミナル2F" }
+              { id: "sh-1", name: "551蓬萊 關西機場店", address: "關西國際機場 第1航廈 2F", icon: "fa-bowl-rice", cat: "food", price: "$", desc: "大阪必吃招牌現蒸肉包，出關即時充飢。" }
             ]
           },
           {
             id: "d1-s2",
-            name: "香榭麗大國 2 (民宿入住放行李)",
-            address: "大阪府大阪市浪速区大国2丁目",
+            name: "香榭麗大國 2 民宿 (入住放行李)",
+            address: "大阪府大阪市浪速区大国2-4-15",
             lat: 34.6548,
             lng: 135.4983,
             icon: "fa-hotel",
             category: "lodging",
             stayMins: 35,
-            travelMode: "南海本線 / 阪堺電車",
+            travelMode: "南海電鐵高野線",
             travelMins: 15,
-            travelDetail: "大國町搭車至住吉東或玉出站徒步 5 分",
-            depTime: "15:00",
-            arrTime: "15:15",
-            note: "放妥行李，換上好走運動鞋，出發前往千年神社。",
+            travelDetail: "大國町站搭車至住吉東站，徒步 5 分",
+            depTime: "15:05",
+            arrTime: "15:20",
+            note: "放妥行李換上輕便步行鞋，準備前往南大阪歷史古蹟。",
             shops: [
-              { id: "sh-2", name: "玉出超市 (大國町店)", address: "大阪府大阪市浪速区大国1丁目1-8", icon: "fa-bag-shopping", cat: "goods", price: "$", desc: "傳奇平價超市，採買飲用水與零食。", query: "スーパー玉出 大国町店 大阪府大阪市浪速区大国1丁目1-8" }
+              { id: "sh-2", name: "藏壽司 なんば元町店", address: "大阪府大阪市浪速区難波中3-1-17", icon: "fa-utensils", cat: "food", price: "$$", desc: "民宿北側步行 2 分鐘，平價迴轉壽司。" },
+              { id: "sh-3", name: "玉出超市 (大國町店)", address: "大阪府大阪市浪速区大国1-2-21", icon: "fa-bag-shopping", cat: "goods", price: "$", desc: "傳奇平價超市，採買飲用水與零食。" }
             ]
           },
           {
             id: "d1-s3",
-            name: "住吉大社 (南大阪千年古社 ＆ 朱紅反橋)",
+            name: "住吉大社 (千年古社 ＆ 反橋祈願)",
             address: "大阪府大阪市住吉区住吉2丁目9-89",
             lat: 34.6133,
             lng: 135.4929,
             icon: "fa-torii-gate",
             category: "sight",
             stayMins: 75,
-            travelMode: "南海電鐵 / 大阪地鐵 御堂筋線",
+            travelMode: "大阪地鐵 御堂筋線",
             travelMins: 20,
-            travelDetail: "由住吉鳥居前搭車回難波／心齋橋商圈（順向北上）",
-            depTime: "15:50",
-            arrTime: "16:10",
-            note: "跨越拱形太鼓反橋洗滌身心，在第一本宮尋找五大力石頭求福。",
+            travelDetail: "搭車回大國町轉乘御堂筋線，直達難波/心齋橋商圈",
+            depTime: "15:55",
+            arrTime: "16:15",
+            note: "跨越拱形反橋洗滌身心，在第一本宮尋找五大力石頭求福。",
             shops: [
-              { id: "sh-4", name: "末廣堂 薩摩燒老鋪", address: "大阪府大阪市住吉区東粉浜3丁目12-14", icon: "fa-bowl-rice", cat: "goods", price: "$", desc: "門前銘菓，酥香紅豆和菓子配熱茶絕配。", query: "末廣堂 大阪府大阪市住吉区東粉浜3丁目12-14" },
-              { id: "sh-5", name: "森森舎 咖啡烘焙", address: "大阪府大阪市住吉区万代3丁目4-12", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "南大阪手作陶器與精緻手沖咖啡甜點。", query: "森森舎 大阪府大阪市住吉区万代3丁目4-12" }
+              { id: "sh-4", name: "末廣堂 薩摩燒老鋪", address: "大阪府大阪市住吉区東粉浜3丁目12-14", icon: "fa-bowl-rice", cat: "goods", price: "$", desc: "門前銘菓，酥香紅豆和菓子配熱茶絕配。" }
             ]
           },
           {
             id: "d1-s4",
-            name: "道頓堀 ＆ 心齋橋商店街 (固力果跑跑人)",
+            name: "道頓堀 固力果跑跑人 ＆ 心齋橋漫步",
             address: "大阪府大阪市中央区道頓堀1丁目10-3",
             lat: 34.6687,
             lng: 135.5013,
             icon: "fa-camera",
             category: "sight",
-            stayMins: 55,
+            stayMins: 50,
             travelMode: "步行",
-            travelMins: 8,
-            travelDetail: "沿戎橋筋漫步北行至南船場餐廳",
-            depTime: "17:25",
-            arrTime: "17:33",
-            note: "黃昏時分在戎橋上與固力果招牌合照，感受大阪運河繁華氣氛。",
+            travelMins: 10,
+            travelDetail: "沿著心齋橋筋商店街北行至南船場",
+            depTime: "17:30",
+            arrTime: "17:40",
+            note: "戎橋經典打卡地標拍照，感受大阪繁華熱鬧氛圍。",
             shops: [
-              { id: "sh-3", name: "本家大章魚燒 道頓堀", address: "大阪府大阪市中央区道頓堀1丁目4-16", icon: "fa-utensils", cat: "food", price: "$", desc: "外皮焦香、章魚超大顆的元祖道頓堀排隊章魚燒。", query: "本家大たこ 道頓堀" }
+              { id: "sh-7", name: "あぶりや 千日前店", address: "大阪府大阪市中央区難波3丁目4-16 4F", icon: "fa-drumstick-bite", cat: "food", price: "$$", desc: "國產牛吃到飽代表名店，厚切牛排與橫膈膜超人氣。" }
             ]
           },
           {
@@ -855,98 +840,95 @@
             category: "food",
             stayMins: 90,
             travelMode: "大阪地鐵 御堂筋線",
-            travelMins: 6,
-            travelDetail: "心齋橋站搭御堂筋線，2站4分鐘直達大國町",
+            travelMins: 10,
+            travelDetail: "心齋橋站搭御堂筋線，2站4分鐘直達大國町站",
             depTime: "18:30",
-            arrTime: "18:36",
+            arrTime: "18:40",
             note: "低溫熟成黑毛和牛個室包廂，肉質極致鮮美，線上中文訂位。",
             shops: [
-              { id: "sh-6", name: "焼肉㐂舌 南船場店", address: "大阪府大阪市中央区南船場4丁目11-22-B1F", icon: "fa-drumstick-bite", cat: "food", price: "$$$", desc: "熟成黑毛和牛獨立包廂，肉質極致鮮美，線上中文訂位。", query: "焼肉㐂舌 南船場店 大阪府大阪市中央区南船場4-11-22" },
-              { id: "sh-7", name: "あぶりや 千日前店", address: "大阪府大阪市中央区難波3丁目4-16", icon: "fa-drumstick-bite", cat: "food", price: "$$", desc: "國產牛吃到飽代表名店，厚切牛排與橫膈膜超人氣。", query: "あぶりや 千日前店 大阪府大阪市中央区難波3丁目4-16" }
+              { id: "sh-6", name: "焼肉㐂舌 南船場店", address: "大阪府大阪市中央区南船場4丁目11-22", icon: "fa-drumstick-bite", cat: "food", price: "$$$", desc: "熟成黑毛和牛獨立包廂，肉質極致鮮美。" }
             ]
           },
           {
             id: "d1-s6",
             name: "返回香榭麗大國 2 休息",
-            address: "大阪府大阪市浪速区大国2丁目",
+            address: "大阪府大阪市浪速区大国2-4-15",
             lat: 34.6548,
             lng: 135.4983,
             icon: "fa-house",
             category: "lodging",
             stayMins: 0,
             travelMode: "步行",
-            travelMins: 4,
+            travelMins: 5,
             travelDetail: "大國町站步行 4 分鐘回民宿",
-            depTime: "20:10",
-            arrTime: "20:14",
-            note: "採買宵夜回民宿泡澡休息，確認明早直奔勝尾寺的搭車時刻。",
+            depTime: "20:20",
+            arrTime: "20:25",
+            note: "整理行李，確認明早前往箕面勝尾寺的電車時刻。",
             shops: [
-              { id: "sh-8", name: "全家便利商店 大國町站前店", address: "大阪府大阪市浪速区敷津西2丁目1-1", icon: "fa-store", cat: "night", price: "$", desc: "買瓶日本明治牛乳與甜點作為睡前宵夜。", query: "ファミリーマート 大国町駅前店" }
+              { id: "sh-8", name: "全家便利商店 大國町站前店", address: "大阪府大阪市浪速区大国1丁目1-1", icon: "fa-store", cat: "night", price: "$", desc: "買瓶日本明治牛乳與甜點作為睡前宵夜。" }
             ]
           }
         ]
       },
       {
         day: 2,
-        title: "北大阪達摩勝運 ➔ 森林飛瀑 ➔ 吹田啤酒 ➔ 梅田夕陽夜景",
-        theme: "萬尊達摩勝運・森林瀑布・Super Dry 見學・梅田空中庭園",
-        desc: "以民宿為起點一線直通最北端勝尾寺，沿溪谷下行賞瀑，午後順路至吹田朝日啤酒見學，傍晚順路南下梅田空中庭園俯瞰大阪夕陽夜景。",
+        title: "北大阪自然祈運 ＆ 朝日啤酒體驗",
+        theme: "萬尊達摩勝運・森林瀑布・Super Dry 見學",
+        desc: "民宿出發一路北上：勝尾寺祈求勝運，順溪谷健行至箕面瀑布，下午探訪吹田朝日啤酒見學，傍晚登梅田藍天大廈空中庭園賞落日夜景。",
         stops: [
           {
             id: "d2-s1",
-            name: "大國町起點 ➔ 御堂筋線直通箕面萱野 ➔ 勝尾寺",
-            address: "大阪府箕面市萱野2丁目",
-            lat: 34.8360,
-            lng: 135.4880,
-            icon: "fa-train",
-            category: "transit",
+            name: "香榭麗大國 2 (民宿出發)",
+            address: "大阪府大阪市浪速区大国2-4-15",
+            lat: 34.6548,
+            lng: 135.4983,
+            icon: "fa-house",
+            category: "lodging",
             stayMins: 10,
             travelMode: "御堂筋線(直通北急) + 阪急巴士",
             travelMins: 50,
-            travelDetail: "大國町直通箕面萱野站，轉乘公車直達勝尾寺門口",
-            depTime: "08:20",
-            arrTime: "09:10",
-            note: "北大阪急行延伸後免換車直通箕面山腳，一班車順暢到底。",
-            shops: [
-              { id: "sh-9", name: "勝尾寺 達摩賣店", address: "大阪府箕面市勝尾寺", icon: "fa-bag-shopping", cat: "goods", price: "$", desc: "購買專屬許願達摩不倒翁（點右眼祈願），拍照極壯觀。", query: "勝尾寺 大阪府箕面市勝尾寺" }
-            ]
+            travelDetail: "大國町站直達箕面萱野站，轉乘公車直達勝尾寺門口",
+            depTime: "08:30",
+            arrTime: "09:20",
+            note: "北大阪急行延伸後免轉車直通箕面山腳，交通極為順暢。",
+            shops: []
           },
           {
             id: "d2-s2",
-            name: "勝尾寺 (萬尊達摩 ＆ 勝運祈願神社)",
-            address: "大阪府箕面市勝尾寺",
+            name: "勝尾寺 (滿山達摩 ＆ 勝運祈願)",
+            address: "大阪府箕面市粟生間谷2914-1",
             lat: 34.8601,
             lng: 135.4912,
             icon: "fa-torii-gate",
             category: "sight",
-            stayMins: 85,
-            travelMode: "自然步道 / 巴士",
-            travelMins: 20,
-            travelDetail: "漫步連接自然步道前往箕面瀑布步道頂端（順路下坡）",
-            depTime: "09:20",
-            arrTime: "09:40",
-            note: "階梯岩壁擺滿無數小達摩，祈求事業與學業勝運極為靈驗。",
+            stayMins: 80,
+            travelMode: "自然步道下坡",
+            travelMins: 30,
+            travelDetail: "漫步連接自然步道前往箕面瀑布步道起點",
+            depTime: "09:30",
+            arrTime: "10:00",
+            note: "境內階梯擺滿遊客還願的小達摩，祈求事業與人生勝運極為靈驗。",
             shops: [
-              { id: "sh-10", name: "勝尾寺辨天茶屋", address: "大阪府箕面市勝尾寺", icon: "fa-mug-hot", cat: "cafe", price: "$", desc: "享用達摩和菓子、宇治抹茶冰淇淋與甘甜熱茶。", query: "勝尾寺 辨天茶屋" }
+              { id: "sh-9", name: "勝尾寺 達摩賣店", address: "大阪府箕面市粟生間谷2914-1 勝尾寺境內", icon: "fa-bag-shopping", cat: "goods", price: "$", desc: "購買專屬許願達摩不倒翁（點右眼祈願）。" }
             ]
           },
           {
             id: "d2-s3",
-            name: "箕面瀑布 (落差33米壯麗自然飛瀑)",
+            name: "箕面瀑布 (落差33米壯麗飛瀑)",
             address: "大阪府箕面市箕面公園2-2",
             lat: 34.8488,
             lng: 135.4746,
             icon: "fa-mountain-sun",
             category: "sight",
-            stayMins: 60,
-            travelMode: "健行步道至 Minoh Q's MALL",
-            travelMins: 25,
-            travelDetail: "沿著平緩溪谷下坡，吸收豐富負離子",
-            depTime: "11:05",
-            arrTime: "11:30",
-            note: "沿路小店現炸販售箕面名物「炸楓葉天婦羅（紅葉天ぷら）」。",
+            stayMins: 50,
+            travelMode: "健行溪谷步道",
+            travelMins: 30,
+            travelDetail: "沿著平緩溪谷步道下行至箕面萱野商圈",
+            depTime: "11:20",
+            arrTime: "11:50",
+            note: "沿路店家現場油炸販售箕面名物「炸楓葉天婦羅」。",
             shops: [
-              { id: "sh-11", name: "久國紅仙堂 炸楓葉", address: "大阪府箕面市箕面1丁目1-40", icon: "fa-bowl-rice", cat: "goods", price: "$", desc: "百年油炸楓葉名店，口感甜脆帶有淡淡白芝麻香。", query: "久國紅仙堂 大阪府箕面市箕面1丁目1-40" }
+              { id: "sh-11", name: "久國紅仙堂 炸楓葉", address: "大阪府箕面市箕面1丁目1-40", icon: "fa-bowl-rice", cat: "goods", price: "$", desc: "百年油炸楓葉名店，口感甜脆帶有淡淡白芝麻香。" }
             ]
           },
           {
@@ -957,16 +939,14 @@
             lng: 135.4890,
             icon: "fa-utensils",
             category: "food",
-            stayMins: 65,
-            travelMode: "北急電車 轉 JR至吹田 (南下順路)",
-            travelMins: 25,
-            travelDetail: "由箕面萱野搭至千里中央，轉電車直抵吹田站",
-            depTime: "12:35",
-            arrTime: "13:00",
-            note: "享用高纖蒸煮蔬菜與豆乳湯定食，清爽健康回血。",
-            shops: [
-              { id: "sh-13", name: "musi-vege+cafe 箕面店", address: "大阪府箕面市西宿1丁目15-30 みのおキューズモール CENTER棟2F", icon: "fa-bowl-rice", cat: "food", price: "$$", desc: "以季節蒸煮蔬菜與豆乳湯底為主打的養生和風定食。", query: "musi-vege+cafe みのおキューズモール店" }
-            ]
+            stayMins: 60,
+            travelMode: "北急電車 轉 JR",
+            travelMins: 30,
+            travelDetail: "由箕面萱野搭至千里中央，轉電車至 JR 吹田站",
+            depTime: "12:40",
+            arrTime: "13:10",
+            note: "musi-vege+cafe 享用高纖蒸蔬菜與豆乳湯定食，少油清爽回血。",
+            shops: []
           },
           {
             id: "d2-s5",
@@ -977,184 +957,161 @@
             icon: "fa-beer-mug-empty",
             category: "sight",
             stayMins: 80,
-            travelMode: "JR 東海道本線 (直達梅田/大阪站)",
-            travelMins: 12,
-            travelDetail: "由 JR 吹田站搭電車直達大阪站（僅 9 分鐘）",
-            depTime: "14:25",
-            arrTime: "14:37",
-            note: "體驗虛擬高速裝罐，試飲 2 杯極致低溫 Super Dry 生啤酒（需提前預約）。",
+            travelMode: "JR 東海道本線",
+            travelMins: 15,
+            travelDetail: "吹田站搭電車直達大阪梅田站，步行至空中庭園",
+            depTime: "14:30",
+            arrTime: "14:45",
+            note: "體驗虛擬裝罐影像，結尾試飲 2 杯極致低溫 Super Dry 生啤酒（需提前預約）。",
             shops: [
-              { id: "sh-14", name: "Asahi Museum 限定店", address: "大阪府吹田市西の庄町1-45", icon: "fa-beer-mug-empty", cat: "goods", price: "$", desc: "吹田工廠限定生啤酒杯與啤酒酵母點心。", query: "アサヒビール ミュージアム 吹田工場" }
+              { id: "sh-14", name: "Asahi Museum 限定店", address: "大阪府吹田市西の庄町1-45 工廠境內", icon: "fa-beer-mug-empty", cat: "goods", price: "$", desc: "吹田工廠限定生啤酒杯與啤酒酵母點心。" }
             ]
           },
           {
             id: "d2-s6",
-            name: "梅田藍天大廈空中庭園 (360度露天夕陽夜景)",
+            name: "梅田藍天大廈空中庭園 (落日與夜景)",
             address: "大阪府大阪市北区大淀中1丁目1-88",
             lat: 34.7059,
             lng: 135.4897,
             icon: "fa-camera",
             category: "sight",
-            stayMins: 75,
-            travelMode: "大阪地鐵 御堂筋線 (直達回大國町)",
-            travelMins: 12,
-            travelDetail: "大阪梅田搭御堂筋線直達大國町站（約 10 分）",
-            depTime: "16:40",
-            arrTime: "16:52",
-            note: "登上 173 米高空露天展望台，俯瞰淀川夕陽與大阪市區百萬夜景。",
-            shops: [
-              { id: "sh-15", name: "滝見小路 懷舊美食街", address: "大阪府大阪市北区大淀中1丁目1-88 梅田スカイビルB1F", icon: "fa-utensils", cat: "food", price: "$$", desc: "昭和復古街景地下美食街，品嚐熱騰騰大阪燒與拉麵。", query: "滝見小路 梅田スカイビルB1F" }
-            ]
-          },
-          {
-            id: "d2-s7",
-            name: "返回香榭麗大國 2 休息",
-            address: "大阪府大阪市浪速区大国2丁目",
-            lat: 34.6548,
-            lng: 135.4983,
-            icon: "fa-house",
-            category: "lodging",
-            stayMins: 0,
-            travelMode: "步行",
-            travelMins: 4,
-            travelDetail: "大國町站出站步行 4 分鐘回民宿",
-            depTime: "19:00",
-            arrTime: "19:04",
-            note: "整理今天拍到的達摩與夕陽美照，準備明天一早姬路城之行。",
+            stayMins: 70,
+            travelMode: "大阪地鐵 御堂筋線",
+            travelMins: 15,
+            travelDetail: "梅田站直達大國町站回民宿",
+            depTime: "17:30",
+            arrTime: "17:45",
+            note: "360度露天環形展望台，俯瞰淀川夕陽與大阪市璀璨百萬夜景。",
             shops: []
           }
         ]
       },
       {
         day: 3,
-        title: "國寶白鷺城 ➔ 神戶三宮和牛 ➔ 異人館 ➔ 港灣夜景",
-        theme: "世界文化遺產白鷺城・神戶牛鐵板燒・北野天滿神社・神戶港塔",
-        desc: "啟用 JR 關西鐵路周遊券！以大國町為起點，先搭新快速直奔最西端姬路城，回程向東順路停靠神戶三宮吃神戶牛、登北野異人館，傍晚於臨海樂園賞港灣夜景。",
+        title: "日本第一名城 ＆ 神戶洋風異人館",
+        theme: "世界文化遺產白鷺城・神戶牛・北野天滿神社",
+        desc: "從民宿出發直衝最西端姬路城大天守，午後回程至神戶三宮品嚐頂級神戶牛，漫步北野異人館街，傍晚欣賞神戶港灣夕陽夜景後直達回大阪。",
         stops: [
           {
             id: "d3-s1",
-            name: "大國町起點 ➔ JR 新快速直奔最西端：姬路城",
+            name: "香榭麗大國 2 (民宿出發)",
+            address: "大阪府大阪市浪速区大国2-4-15",
+            lat: 34.6548,
+            lng: 135.4983,
+            icon: "fa-house",
+            category: "lodging",
+            stayMins: 10,
+            travelMode: "地鐵御堂筋線 + JR 新快速",
+            travelMins: 70,
+            travelDetail: "大國町搭地鐵至梅田，轉乘【JR 新快速】直達姬路（約 62 分）",
+            depTime: "07:50",
+            arrTime: "09:00",
+            note: "出姬路站沿大手前通步行約 15 分鐘抵達姬路城大門。",
+            shops: []
+          },
+          {
+            id: "d3-s2",
+            name: "國寶姬路城 (白鷺城登大天守)",
             address: "兵庫県姫路市本町68",
             lat: 34.8394,
             lng: 134.6939,
             icon: "fa-fort-awesome",
             category: "sight",
             stayMins: 130,
-            travelMode: "JR 新快速 (直達姬路)",
-            travelMins: 65,
-            travelDetail: "大國町地鐵至梅田，持 JR 周遊券搭【JR 新快速】直達姬路（約 60 分）",
-            depTime: "07:45",
-            arrTime: "08:50",
-            note: "日本第一名城、現存十二天守之首。天守閣階梯陡峭，建議預留充足時間。",
+            travelMode: "JR 新快速 (直達神戶三之宮)",
+            travelMins: 40,
+            travelDetail: "步行回姬路站，搭乘 JR 新快速約 40 分抵達三之宮站",
+            depTime: "09:20",
+            arrTime: "12:10",
+            note: "日本保存最完整的十二現存天守之首。天守閣階梯陡峭，建議預留 2 小時。",
             shops: [
-              { id: "sh-18", name: "好古園 活水軒", address: "兵庫県姫路市本町68", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "姬路城旁日式庭園餐廳，邊品茶邊賞錦鯉池泉。", query: "好古園 活水軒 兵庫県姫路市本町68" }
+              { id: "sh-18", name: "好古園 活水軒", address: "兵庫県姫路市本町68 好古園內", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "姬路城旁日式庭園餐廳，邊品茶邊賞鯉魚池泉。" }
             ]
           },
           {
-            id: "d3-s2",
-            name: "神戶三宮午餐 (神戶牛鐵板燒 - 東行回程順路)",
+            id: "d3-s3",
+            name: "神戶三宮午餐：神戸牛 喜山 (鐵板燒)",
             address: "兵庫県神戸市中央区北長狭通2丁目12-6",
             lat: 34.6943,
             lng: 135.1955,
             icon: "fa-drumstick-bite",
             category: "food",
-            stayMins: 85,
-            travelMode: "JR 新快速 (姬路 ➔ 三之宮)",
-            travelMins: 40,
-            travelDetail: "姬路站搭乘 JR 新快速約 40 分抵達三之宮站，出站即達",
-            depTime: "11:30",
-            arrTime: "12:10",
-            note: "三宮站周邊推薦喜山、Mouriya 或 Steakland 午間優惠神戶牛套餐。",
-            shops: [
-              { id: "sh-19", name: "神戸牛 喜山 (Kiyama)", address: "兵庫県神戸市中央区北長狭通2丁目12-6 Kビル1F", icon: "fa-drumstick-bite", cat: "food", price: "$$$", desc: "A5 級神戶牛專門店，師傅鐵板現煎霜降牛排入口即化。", query: "神戸牛 喜山 兵庫県神戸市中央区北長狭通2-12-6" }
-            ]
-          },
-          {
-            id: "d3-s3",
-            name: "北野異人館街 ＆ 北野天滿神社 (俯瞰神戶港)",
-            address: "兵庫県神戸市中央区北野町3丁目3-1",
-            lat: 34.7003,
-            lng: 135.1903,
-            icon: "fa-landmark",
-            category: "sight",
-            stayMins: 90,
-            travelMode: "沿北野坂步行",
+            stayMins: 80,
+            travelMode: "步行爬坡沿北野坂",
             travelMins: 15,
-            travelDetail: "三宮站沿北野坂緩坡漫步約 12-15 分抵達異人館街",
-            depTime: "13:50",
-            arrTime: "14:05",
-            note: "登上北野天滿神社鳥居階梯，俯瞰紅磚風見雞館與神戶港海景同框絕景！",
+            travelDetail: "三宮站沿北野坂步行約 12–15 分鐘抵達異人館街",
+            depTime: "12:15",
+            arrTime: "12:30",
+            note: "A5 級神戶牛專門店，師傅鐵板現煎霜降牛排入口即化。",
             shops: [
-              { id: "sh-21", name: "星巴克 神戶北野異人館店", address: "兵庫県神戸市中央区北野町3-1-31", icon: "fa-mug-hot", cat: "cafe", price: "$", desc: "百年登錄有形文化財洋樓改建，保留木造復古氛圍。", query: "スターバックス コーヒー 神戸北野異人館店 兵庫県神戸市中央区北野町3-1-31" }
+              { id: "sh-19", name: "神戸牛 喜山 (Kiyama)", address: "兵庫県神戸市中央区北長狭通2丁目12-6", icon: "fa-drumstick-bite", cat: "food", price: "$$$", desc: "A5 級神戶牛專門店，師傅鐵板現煎霜降牛排。" }
             ]
           },
           {
             id: "d3-s4",
-            name: "神戶臨海樂園 umie ＆ 美利堅公園港塔夜景",
+            name: "北野異人館街 ＆ 北野天滿神社",
+            address: "兵庫県神戸市中央区北野町",
+            lat: 34.7003,
+            lng: 135.1903,
+            icon: "fa-landmark",
+            category: "sight",
+            stayMins: 85,
+            travelMode: "散步下坡至元町 / 神戶港",
+            travelMins: 20,
+            travelDetail: "下山漫步至海濱公園欣賞夜景",
+            depTime: "14:15",
+            arrTime: "14:35",
+            note: "登上北野天滿神社鳥居階梯，俯瞰紅磚風見雞洋樓與神戶港海景同框絕景！",
+            shops: [
+              { id: "sh-21", name: "星巴克 神戶北野異人館店", address: "兵庫県神戸市中央区北野町3-1-31", icon: "fa-mug-hot", cat: "cafe", price: "$", desc: "百年登錄有形文化財洋樓改建，保留木造復古氛圍。" }
+            ]
+          },
+          {
+            id: "d3-s5",
+            name: "神戶臨海樂園 umie ＆ 美利堅公園夜景",
             address: "兵庫県神戸市中央区東川崎町1丁目7-2",
             lat: 34.6792,
             lng: 135.1834,
             icon: "fa-camera",
             category: "sight",
-            stayMins: 85,
-            travelMode: "下坡散步 / 地鐵海邊線",
-            travelMins: 20,
-            travelDetail: "由北野散步下行至海濱美利堅公園欣賞神戶港塔夜景",
-            depTime: "16:00",
-            arrTime: "16:20",
-            note: "欣賞全新點燈的神戶港塔（Port Tower）與紅色摩天輪海灣夜景。",
-            shops: [
-              { id: "sh-23", name: "Umie MOSAIC 海景露台", address: "兵庫県神戸市中央区東川崎町1丁目6-1", icon: "fa-utensils", cat: "food", price: "$$", desc: "面海露台邊吃手作披薩邊賞遊輪港景。", query: "神戸ハーバーランド umie MOSAIC 兵庫県神戸市中央区東川崎町1丁目6-1" }
-            ]
-          },
-          {
-            id: "d3-s5",
-            name: "神戶站搭 JR 新快速 ➔ 返回香榭麗大國 2",
-            address: "大阪府大阪市浪速区大国2丁目",
-            lat: 34.6548,
-            lng: 135.4983,
-            icon: "fa-house",
-            category: "lodging",
-            stayMins: 0,
-            travelMode: "JR 新快速 + 地鐵御堂筋線",
-            travelMins: 35,
-            travelDetail: "神戶站搭新快速直達大阪站（25分），轉御堂筋線直達大國町",
-            depTime: "18:30",
-            arrTime: "19:05",
-            note: "車程極順暢，提早回民宿好好休息，儲備明天環球影城體力。",
+            stayMins: 80,
+            travelMode: "JR 新快速 (直達大阪站)",
+            travelMins: 25,
+            travelDetail: "JR 神戶站搭新快速至大阪站（約 25 分），轉御堂筋線回大國町",
+            depTime: "17:30",
+            arrTime: "18:00",
+            note: "欣賞全新點燈的神戶港塔（Port Tower）與紅色摩天輪夜景。",
             shops: []
           }
         ]
       },
       {
         day: 4,
-        title: "日本環球影城 USJ 全日狂歡 ➔ CityWalk 晚餐慶功",
-        theme: "超級任天堂世界・哈利波特・飛天翼龍震撼體驗",
-        desc: "以民宿為起點清晨出發，開園第一波衝進超級任天堂世界玩瑪利歐賽車，全日暢玩禁忌之旅與刺激設施，傍晚於 CityWalk 享用晚餐慶功。",
+        title: "日本環球影城 USJ 全日狂歡",
+        theme: "任天堂世界・哈利波特・飛天翼龍震撼體驗",
+        desc: "清晨早起直奔 USJ！開園第一波衝進超級任天堂世界玩瑪利歐賽車，全日暢玩禁忌之旅與刺激遊樂設施，夜晚順路電車回民宿。",
         stops: [
           {
             id: "d4-s1",
-            name: "香榭麗大國 2 起點 ➔ JR 今宮站直達環球影城",
-            address: "大阪府大阪市此花区島屋6丁目2",
-            lat: 34.6654,
-            lng: 135.4323,
-            icon: "fa-train",
-            category: "transit",
+            name: "香榭麗大國 2 (民宿出發)",
+            address: "大阪府大阪市浪速区大国2-4-15",
+            lat: 34.6548,
+            lng: 135.4983,
+            icon: "fa-house",
+            category: "lodging",
             stayMins: 10,
             travelMode: "JR 環狀線 + 櫻島線",
-            travelMins: 28,
+            travelMins: 30,
             travelDetail: "民宿步行 8 分至【JR 今宮站】，搭至西九條轉櫻島線直達 USJ",
-            depTime: "06:40",
-            arrTime: "07:08",
-            note: "民宿離 JR 今宮站極近，免轉多次車，約 30 分鐘直達樂園大門口！",
-            shops: [
-              { id: "sh-25", name: "Universal CityWalk 飯糰", address: "大阪府大阪市此花区島屋6丁目2-61", icon: "fa-bowl-rice", cat: "food", price: "$", desc: "入園前快速外帶現捏手做飯糰與熱咖啡充實體力。", query: "ユニバーサル・シティウォーク大阪" }
-            ]
+            depTime: "06:45",
+            arrTime: "07:15",
+            note: "香榭麗大國 2 離 JR 今宮站極近，約 30 分鐘即可抵達樂園大門口！",
+            shops: []
           },
           {
             id: "d4-s2",
-            name: "開園首衝：超級任天堂世界 (瑪利歐賽車)",
-            address: "大阪府大阪市此花区桜島2丁目1-33",
+            name: "日本環球影城：超級任天堂世界",
+            address: "大阪府大阪市此花区桜島2丁目1-33 USJ園區內",
             lat: 34.6660,
             lng: 135.4300,
             icon: "fa-ticket",
@@ -1167,13 +1124,13 @@
             arrTime: "07:40",
             note: "暢玩【瑪利歐賽車～庫巴的挑戰書～】、戴上能量手環敲磚塊拿金幣。",
             shops: [
-              { id: "sh-26", name: "奇諾比奧咖啡店 (Kinopio's Cafe)", address: "大阪府大阪市此花区桜島2丁目1-33 USJ スーパー・ニンテンドー・ワールド内", icon: "fa-mug-hot", cat: "food", price: "$$", desc: "超級蘑菇披薩碗、無敵星米飯，造型吸睛美味度驚豔！", query: "キノピオ・カフェ ユニバーサル・スタジオ・ジャパン" }
+              { id: "sh-26", name: "奇諾比奧咖啡店 (Kinopio's Cafe)", address: "USJ 超級任天堂世界園區內", icon: "fa-mug-hot", cat: "food", price: "$$", desc: "超級蘑菇披薩碗、無敵星米飯，造型吸睛美味！" }
             ]
           },
           {
             id: "d4-s3",
-            name: "哈利波特魔法世界 (活米村 ＆ 禁忌之旅)",
-            address: "大阪府大阪市此花区桜島2丁目1-33",
+            name: "哈利波特禁忌之旅 ＆ 活米村",
+            address: "大阪府大阪市此花区桜島2丁目1-33 USJ園區內",
             lat: 34.6658,
             lng: 135.4345,
             icon: "fa-fort-awesome",
@@ -1182,167 +1139,110 @@
             travelMode: "園區步行",
             travelMins: 10,
             travelDetail: "穿過巨石陣森林，造訪白雪皚皚活米村與霍格華茲城堡",
-            depTime: "11:20",
-            arrTime: "11:30",
+            depTime: "11:30",
+            arrTime: "11:40",
             note: "體驗【哈利波特禁忌之旅 4K3D】，喝杯招牌冰涼奶油啤酒。",
             shops: [
-              { id: "sh-28", name: "三根掃帚酒吧", address: "大阪府大阪市此花区桜島2丁目1-33 USJ ウィザーディング・ワールド・オブ・ハリー・ポッター内", icon: "fa-beer-mug-empty", cat: "food", price: "$$", desc: "必喝招牌「奶油啤酒」與英式烤雞餐盤。", query: "三本の箒 USJ" }
+              { id: "sh-28", name: "三根掃帚酒吧", address: "USJ 哈利波特園區內", icon: "fa-beer-mug-empty", cat: "food", price: "$$", desc: "必喝招牌「奶油啤酒」與英式烤雞餐盤。" }
             ]
           },
           {
             id: "d4-s4",
-            name: "侏儸紀公園 (飛天翼龍) ＆ 小小兵樂園",
+            name: "飛天翼龍 ＆ 小小兵樂園 ➔ 返回民宿",
             address: "大阪府大阪市此花区桜島2丁目1-33",
             lat: 34.6645,
             lng: 135.4330,
             icon: "fa-camera",
             category: "sight",
-            stayMins: 180,
-            travelMode: "園區步行",
-            travelMins: 10,
-            travelDetail: "挑戰世界最長最陡懸吊式過山車【飛天翼龍】",
-            depTime: "14:00",
-            arrTime: "14:10",
-            note: "善用 Single Rider 單人走道大幅省時，啃隻巨大燻烤火雞腿充飢。",
-            shops: [
-              { id: "sh-30", name: "侏儸紀燻烤巨大火雞腿", address: "大阪府大阪市此花区桜島2丁目1-33 USJ ジュラシック・パーク内", icon: "fa-drumstick-bite", cat: "food", price: "$$", desc: "超大份量燻烤火雞腿，肉汁豐富飽足。", query: "フォッシル・フエルズ USJ" }
-            ]
-          },
-          {
-            id: "d4-s5",
-            name: "Universal CityWalk 晚餐慶功 ➔ 返回民宿",
-            address: "大阪府大阪市此花区島屋6丁目2-61",
-            lat: 34.6675,
-            lng: 135.4360,
-            icon: "fa-utensils",
-            category: "food",
-            stayMins: 80,
+            stayMins: 200,
             travelMode: "JR 櫻島線 + 環狀線",
-            travelMins: 28,
-            travelDetail: "搭 JR 由西九條直達 JR 今宮站，步行 8 分回民宿",
-            depTime: "18:10",
-            arrTime: "18:38",
-            note: "CityWalk 享用神戶元町炸豬排或章魚燒博物館，慶祝 USJ 完美達標。",
-            shops: []
-          },
-          {
-            id: "d4-s6",
-            name: "返回香榭麗大國 2 民宿",
-            address: "大阪府大阪市浪速区大国2丁目",
-            lat: 34.6548,
-            lng: 135.4983,
-            icon: "fa-house",
-            category: "lodging",
-            stayMins: 0,
-            travelMode: "步行",
-            travelMins: 5,
-            travelDetail: "步行回民宿整理戰利品",
-            depTime: "20:00",
-            arrTime: "20:05",
-            note: "將行李箱打理妥當，預留空間給明天的臨空城 Outlet 大血拚。",
-            shops: []
+            travelMins: 30,
+            travelDetail: "閉園後搭 JR 經西九條回 JR 今宮站，步行回大國町民宿",
+            depTime: "14:30",
+            arrTime: "15:00",
+            note: "挑戰世界最長最陡懸吊式過山車【飛天翼龍】，善用 Single Rider 走道大幅省時。",
+            shops: [
+              { id: "sh-30", name: "侏儸紀燻烤巨大火雞腿", address: "USJ 侏儸紀公園園區內餐車", icon: "fa-drumstick-bite", cat: "food", price: "$$", desc: "樂園必啃手拿美食！超大份量燻烤火雞腿。" }
+            ]
           }
         ]
       },
       {
         day: 5,
-        title: "木津市場海鮮早餐 ➔ 臨空城 Outlet ➔ 6分鐘直達機場返台",
-        theme: "木津海鮮丼・臨空城名品血拚・6分鐘電車直達KIX",
-        desc: "以民宿為起點，早晨步行3分造訪木津市場享用現切刺身海鮮丼，搭南海電鐵直達臨空城寄放行李大採購，搭電車1站（6分鐘跨海大橋）直達關西機場登機！",
+        title: "木津市場晨食 ＆ 臨空城Outlet直達機場",
+        theme: "在地海鮮丼・名品血拚・6分鐘電車直達KIX",
+        desc: "民宿退房後徒步至木津批發市場吃海鮮早餐，接著搭南海空港急行直達臨空城 Outlet 大採購，最後電車 1 站（6分鐘）直抵關西機場出境！",
         stops: [
           {
             id: "d5-s1",
-            name: "木津卸売市場 (民宿步行3分！現切生魚片海鮮丼早餐)",
-            address: "大阪府大阪市浪速区敷津東2丁目2-8",
-            lat: 34.6568,
-            lng: 135.5002,
-            icon: "fa-bowl-rice",
-            category: "food",
-            stayMins: 65,
-            travelMode: "步行",
-            travelMins: 4,
-            travelDetail: "民宿步行 3-4 分鐘直達市場入口",
-            depTime: "08:30",
-            arrTime: "08:34",
-            note: "大阪超過三百年批發市場，品嚐當日現撈生魚片丼飯、海膽與香甜草莓水果。",
-            shops: [
-              { id: "sh-30b", name: "魚市食堂 木津市場店", address: "大阪府大阪市浪速区敷津東2丁目2-8", icon: "fa-bowl-rice", cat: "food", price: "$$", desc: "新鮮爆量海鮮丼名店，鮪魚大腹、鮭魚卵鋪滿整碗。", query: "魚市食堂 木津市場" }
-            ]
-          },
-          {
-            id: "d5-s2",
-            name: "香榭麗大國 2 退房 ➔ 南海電鐵直達臨空城",
-            address: "大阪府大阪市浪速区大国2丁目",
+            name: "香榭麗大國 2 (退房出發)",
+            address: "大阪府大阪市浪速区大国2-4-15",
             lat: 34.6548,
             lng: 135.4983,
             icon: "fa-suitcase-rolling",
-            category: "transit",
+            category: "lodging",
             stayMins: 15,
+            travelMode: "步行",
+            travelMins: 5,
+            travelDetail: "推行李步行約 4 分鐘至木津批發市場",
+            depTime: "08:30",
+            arrTime: "08:45",
+            note: "退房後帶著行李出發，開始最後一天的順暢行程。",
+            shops: []
+          },
+          {
+            id: "d5-s2",
+            name: "木津卸売市場 (木津批發市場海鮮早餐)",
+            address: "大阪府大阪市浪速区敷津東2丁目2-8",
+            lat: 34.6575,
+            lng: 135.4998,
+            icon: "fa-bowl-rice",
+            category: "food",
+            stayMins: 60,
             travelMode: "南海電鐵 空港急行",
-            travelMins: 38,
-            travelDetail: "大國町搭地鐵1站至難波，搭【南海空港急行】直達臨空城站（約 36 分）",
-            depTime: "09:50",
-            arrTime: "10:28",
-            note: "臨空城站出站走天橋 6 分鐘直達 Outlet，車站與服務中心均設有大型行李櫃。",
-            shops: [
-              { id: "sh-31", name: "臨空城 遊客服務中心寄物處", address: "大阪府泉佐野市りんくう往来南3-28", icon: "fa-suitcase-rolling", cat: "goods", price: "$", desc: "置物櫃滿載時，可至服務處人工寄放大件行李箱。", query: "りんくうプレミアム・アウトレット インフォメーションセンター" }
-            ]
+            travelMins: 40,
+            travelDetail: "步行至南海難波站，搭【南海空港急行】直達臨空城站（約 38 分）",
+            depTime: "09:00",
+            arrTime: "09:40",
+            note: "品嚐極上現切生魚片丼飯、海膽與玉子燒，在地人最愛的三百年魚市場！",
+            shops: []
           },
           {
             id: "d5-s3",
-            name: "臨空城 Outlet (Rinku Premium Outlets) 大採購",
+            name: "臨空城 Outlet (Rinku Premium Outlets)",
             address: "大阪府泉佐野市りんくう往来南3-28",
             lat: 34.4072,
             lng: 135.2952,
             icon: "fa-bag-shopping",
             category: "sight",
             stayMins: 180,
-            travelMode: "園區步行",
-            travelMins: 10,
-            travelDetail: "坐擁大阪灣海景，分為 Main 棟與 Seaside 棟",
-            depTime: "10:45",
-            arrTime: "10:55",
-            note: "Adidas、Nike、Snow Peak、BEAMS、Skechers 折扣高，出示護照領優惠券。",
+            travelMode: "南海電鐵 / JR (僅1站)",
+            travelMins: 6,
+            travelDetail: "走回臨空城站，刷卡搭南海急行或 JR 關空快速【跨海大橋 1 站 6 分鐘直達機場】",
+            depTime: "10:50",
+            arrTime: "11:00",
+            note: "置物櫃寄放大件行李，血拚 Nike、Adidas、Snow Peak，出示護照領優惠券。",
             shops: [
-              { id: "sh-32", name: "Snow Peak Cafe 臨空店", address: "大阪府泉佐野市りんくう往来南3-28 シーサイドエリア 1F", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "海景露營風咖啡館，品嚐滴漏單品咖啡與厚鬆餅。", query: "スノーピーク 大阪府泉佐野市りんくう往来南3-28" }
+              { id: "sh-32", name: "Snow Peak Cafe 臨空店", address: "大阪府泉佐野市りんくう往来南3-28 Seaside 棟", icon: "fa-mug-hot", cat: "cafe", price: "$$", desc: "海景露營風咖啡館，品嚐滴漏單品咖啡與厚鬆餅。" }
             ]
           },
           {
             id: "d5-s4",
-            name: "臨空城站 ➔ 關西國際機場 (KIX) 【關鍵 1 站 6 分鐘】",
-            address: "大阪府泉佐野市りんくう往来北1",
-            lat: 34.4110,
-            lng: 135.2995,
-            icon: "fa-train",
-            category: "transit",
-            stayMins: 10,
-            travelMode: "南海急行 / JR關空快速 (僅1站)",
-            travelMins: 6,
-            travelDetail: "走回臨空城站，刷卡搭南海急行或 JR 關空快速【跨海大橋 1 站 6 分鐘直達】",
-            depTime: "14:15",
-            arrTime: "14:21",
-            note: "車程只需 5～6 分鐘，不塞車超準點，不用在市區提戰利品轉車！",
-            shops: [
-              { id: "sh-34", name: "KIX 免稅店伴手禮大街", address: "大阪府泉佐野市泉州空港北1 関西国際空港 第1ターミナル3F 出国エリア", icon: "fa-bag-shopping", cat: "goods", price: "$$", desc: "入關後購買薯條三兄弟、白色戀人、ROYCE生巧克力。", query: "関西国際空港 第1ターミナル 免税店" }
-            ]
-          },
-          {
-            id: "d5-s5",
-            name: "關西國際機場辦理退稅、登機 ➔ 平安返台",
+            name: "關西國際機場 (辦理退稅、登機返台)",
             address: "大阪府泉佐野市泉州空港北1",
             lat: 34.4320,
             lng: 135.2304,
             icon: "fa-plane-departure",
-            category: "sight",
+            category: "transit",
             stayMins: 120,
             travelMode: "國際航班",
             travelMins: 0,
-            travelDetail: "T1 直接由二樓出站走空橋進報到大廳；T2 搭 Aeroplaza 接駁車",
-            depTime: "14:35",
-            arrTime: "16:35",
+            travelDetail: "T1 直接由二樓出站走空橋進報到大廳；T2 搭 Aeroplaza 免費接駁車",
+            depTime: "14:15",
+            arrTime: "16:15",
             note: "起飛前至少 2.5 小時抵達機場報到出關，退稅並做最後免稅品補貨。",
             shops: [
-              { id: "sh-35", name: "町家小路 (KIX美食街)", address: "大阪府泉佐野市泉州空港北1 関西国際空港 第1ターミナル2F", icon: "fa-bowl-rice", cat: "food", price: "$$", desc: "出關前最後品嚐道地烏龍麵與日式炸蝦丼飯。", query: "町家小路 関西国際空港 第1ターミナル2F" }
+              { id: "sh-34", name: "KIX 免稅店伴手禮大街", address: "關西國際機場 T1 出境管制區內", icon: "fa-bag-shopping", cat: "goods", price: "$$", desc: "入關後購買薯條三兄弟、白色戀人、ROYCE生巧克力。" }
             ]
           }
         ]
@@ -1403,196 +1303,51 @@
       }
     }
 
-    let searchDebounceTimer = null;
-
-    function initPOIAutocomplete() {
-      const inputEl = document.getElementById('formStopName');
-      const resultsBox = document.getElementById('autocompleteDropdown');
-      const spinner = document.getElementById('searchLoadingSpinner');
-
-      inputEl.addEventListener('input', (e) => {
-        const query = e.target.value.trim();
-        clearTimeout(searchDebounceTimer);
-
-        if (query.length < 2) {
-          resultsBox.classList.add('hidden');
-          resultsBox.innerHTML = '';
-          if (spinner) spinner.classList.add('hidden');
-          return;
-        }
-
-        const localMatches = POPULAR_LOCATIONS.filter(l => l.name.toLowerCase().includes(query.toLowerCase()));
-        
-        searchDebounceTimer = setTimeout(() => {
-          fetchNominatimPOI(query, localMatches);
-        }, 350);
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('#stopModal')) {
-          resultsBox.classList.add('hidden');
-        }
-      });
-    }
-
-    async function fetchNominatimPOI(query, localMatches = []) {
-      const resultsBox = document.getElementById('autocompleteDropdown');
-      const spinner = document.getElementById('searchLoadingSpinner');
-      if (spinner) spinner.classList.remove('hidden');
-
+    function syncStateToUrl() {
       try {
-        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=134.4,35.3,136.0,34.2&bounded=0&countrycodes=jp&addressdetails=1&limit=6`;
-        const res = await fetch(url, { headers: { 'Accept-Language': 'zh-TW,zh,ja,en' } });
-        const apiData = await res.json();
-        renderAutocompleteDropdown(query, localMatches, apiData || []);
+        const payload = {
+          d: appData,
+          e: expenseData
+        };
+        const jsonStr = JSON.stringify(payload);
+        const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
+        const newUrl = `${window.location.pathname}${window.location.search}#data=${encoded}`;
+        window.history.replaceState(null, '', newUrl);
       } catch (err) {
-        console.warn("Autocomplete API error, fallback to local database", err);
-        renderAutocompleteDropdown(query, localMatches, []);
-      } finally {
-        if (spinner) spinner.classList.add('hidden');
+        console.warn("URL sync compression warning:", err);
       }
     }
 
-    function renderAutocompleteDropdown(query, locals, apiList) {
-      const resultsBox = document.getElementById('autocompleteDropdown');
-      resultsBox.innerHTML = '';
-
-      const combined = [];
-      locals.forEach(l => {
-        combined.push({
-          displayName: l.name,
-          subText: l.address || "關西精選推薦景點",
-          address: l.address || "",
-          lat: l.lat,
-          lng: l.lng,
-          icon: l.icon || "fa-location-dot",
-          category: l.category || "sight",
-        });
-      });
-
-      apiList.forEach(item => {
-        const already = combined.some(c => c.displayName.includes(item.name) || (Math.abs(c.lat - parseFloat(item.lat)) < 0.001 && Math.abs(c.lng - parseFloat(item.lon)) < 0.001));
-        if (!already) {
-          combined.push({
-            displayName: item.name || item.display_name.split(',')[0],
-            subText: item.display_name.split(',').slice(1, 4).join(', ').trim() || "日本關西",
-            address: item.display_name || "",
-            lat: parseFloat(item.lat),
-            lng: parseFloat(item.lon),
-            icon: inferIconFromClass(item.type, item.class),
-            category: inferCategoryFromClass(item.type, item.class),
-          });
+    function loadStateFromUrl() {
+      try {
+        const hash = window.location.hash;
+        if (!hash || !hash.includes('#data=')) return false;
+        const rawBase64 = decodeURIComponent(hash.split('#data=')[1]);
+        const decodedStr = decodeURIComponent(escape(atob(rawBase64)));
+        const parsed = JSON.parse(decodedStr);
+        if (parsed && parsed.d && Array.isArray(parsed.d)) {
+          appData = parsed.d;
+          if (parsed.e) expenseData = parsed.e;
+          return true;
         }
-      });
-
-      if (combined.length === 0) {
-        resultsBox.innerHTML = `
-          <div class="p-2.5 text-center text-slate-400 text-xs">
-            查無相符地點，可直接手動輸入名稱與座標
-          </div>
-        `;
-        resultsBox.classList.remove('hidden');
-        return;
+      } catch (err) {
+        console.warn("Failed to load state from URL hash:", err);
       }
-
-      combined.slice(0, 6).forEach(item => {
-        const itemBtn = document.createElement('div');
-        itemBtn.className = "w-full text-left p-2 hover:bg-sky-50 dark:hover:bg-slate-800 transition flex items-start gap-2 cursor-pointer border-b theme-card-border last:border-0";
-        itemBtn.innerHTML = `
-          <div class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-500 flex items-center justify-center flex-shrink-0 text-xs">
-            <i class="fa-solid ${item.icon}"></i>
-          </div>
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-1.5 justify-between">
-              <span class="font-bold text-slate-800 dark:text-slate-100 truncate">${item.displayName}</span>
-              <span class="text-[9px] text-slate-400 font-mono">${item.lat.toFixed(4)}, ${item.lng.toFixed(4)}</span>
-            </div>
-            <p class="text-[9.5px] text-slate-400 dark:text-slate-500 truncate">${item.subText}</p>
-          </div>
-        `;
-
-        itemBtn.addEventListener('click', () => {
-          document.getElementById('formStopName').value = item.displayName;
-          document.getElementById('formStopAddress').value = item.address || '';
-          document.getElementById('formStopLat').value = item.lat;
-          document.getElementById('formStopLng').value = item.lng;
-          document.getElementById('formStopIcon').value = item.icon;
-          document.getElementById('formStopCategory').value = item.category;
-
-          const previewEl = document.getElementById('stopModalHeaderIcon');
-          if (previewEl) previewEl.className = `fa-solid ${item.icon}`;
-
-          renderIconSelector('stopIconGrid', 'formStopIcon', item.icon, 'stopModalHeaderIcon');
-          resultsBox.classList.add('hidden');
-          showToast(`已載入：${item.displayName} 地址與屬性！`);
-        });
-
-        resultsBox.appendChild(itemBtn);
-      });
-
-      resultsBox.classList.remove('hidden');
-    }
-
-    function inferIconFromClass(type, clazz) {
-      if (clazz === 'tourism' && type === 'attraction') return 'fa-landmark';
-      if (clazz === 'place_of_worship' || type === 'shrine' || type === 'temple') return 'fa-torii-gate';
-      if (clazz === 'railway' || type === 'station') return 'fa-train';
-      if (clazz === 'aeroway') return 'fa-plane-departure';
-      if (clazz === 'amenity' && (type === 'restaurant' || type === 'food_court')) return 'fa-utensils';
-      if (clazz === 'amenity' && type === 'cafe') return 'fa-mug-hot';
-      if (clazz === 'shop') return 'fa-bag-shopping';
-      if (clazz === 'tourism' && type === 'hotel') return 'fa-hotel';
-      return 'fa-location-dot';
-    }
-
-    function inferCategoryFromClass(type, clazz) {
-      if (clazz === 'railway' || type === 'station' || clazz === 'aeroway') return 'transit';
-      if (clazz === 'amenity' && (type === 'restaurant' || type === 'food_court' || type === 'cafe' || type === 'bar')) return 'food';
-      if (clazz === 'tourism' && (type === 'hotel' || type === 'guest_house')) return 'lodging';
-      return 'sight';
-    }
-
-    function initTheme() {
-      const savedTheme = localStorage.getItem(THEME_KEY) || 'ocean';
-      applyTheme(savedTheme, false);
-    }
-
-    function applyTheme(themeName, showNotif = true) {
-      if (themeName === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.setAttribute('data-theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.setAttribute('data-theme', themeName);
-      }
-      localStorage.setItem(THEME_KEY, themeName);
-
-      document.querySelectorAll('.theme-select-btn').forEach(btn => {
-        if (btn.getAttribute('data-theme-val') === themeName) {
-          btn.classList.add('ring-2', 'ring-offset-1', 'ring-slate-900', 'dark:ring-white');
-        } else {
-          btn.classList.remove('ring-2', 'ring-offset-1', 'ring-slate-900', 'dark:ring-white');
-        }
-      });
-      if (showNotif) showToast(`已切換配色：${themeName}`);
+      return false;
     }
 
     function initData() {
+      const loadedFromUrl = loadStateFromUrl();
+      if (loadedFromUrl) {
+        saveData(false);
+        showToast("已載入網址中的最新行程資料！");
+        return;
+      }
+
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           appData = JSON.parse(stored);
-          if (Array.isArray(appData)) {
-            appData.forEach(d => {
-              (d.stops || []).forEach(s => {
-                if (!s.address) {
-                  const pureName = s.name.split(' (')[0].split(' ➔')[0].trim();
-                  const match = POPULAR_LOCATIONS.find(p => p.name.includes(pureName) || pureName.includes(p.name.split(' (')[0]));
-                  if (match && match.address) s.address = match.address;
-                }
-              });
-            });
-          }
         } else {
           appData = JSON.parse(JSON.stringify(DEFAULT_ITINERARY_DATA));
           saveData(false);
@@ -1606,13 +1361,15 @@
         console.error("Storage loading error", err);
         appData = JSON.parse(JSON.stringify(DEFAULT_ITINERARY_DATA));
       }
+      syncStateToUrl();
     }
 
     function saveData(notify = true) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
         localStorage.setItem(EXPENSES_KEY, JSON.stringify(expenseData));
-        if (notify) showToast("已自動儲存至本機！");
+        syncStateToUrl();
+        if (notify) showToast("已自動儲存並同步至網址！");
       } catch (e) {
         showToast("本機空間不足，儲存失敗");
       }
@@ -1621,6 +1378,7 @@
     function showToast(msg) {
       const toast = document.getElementById('toastNotification');
       const toastMsg = document.getElementById('toastMsg');
+      if (!toast || !toastMsg) return;
       toastMsg.textContent = msg;
       toast.classList.remove('opacity-0', 'pointer-events-none');
       setTimeout(() => {
@@ -1643,6 +1401,7 @@
 
     function renderDayTabs() {
       const container = document.getElementById('dayTabsList');
+      if (!container) return;
       container.innerHTML = '';
 
       appData.forEach((day, index) => {
@@ -1668,6 +1427,7 @@
 
     function renderDayHeader() {
       const currentDay = appData[currentDayIndex];
+      if (!currentDay) return;
       document.getElementById('currentDayBadge').textContent = `Day ${currentDay.day}`;
       document.getElementById('currentDayTheme').textContent = currentDay.theme;
       document.getElementById('currentDayTitle').textContent = currentDay.title;
@@ -1675,9 +1435,16 @@
       document.getElementById('stopsCountBadge').textContent = currentDay.stops.length;
     }
 
+    function openGoogleMapsForStop(stop) {
+      let queryTarget = stop.address ? `${stop.name} ${stop.address}` : stop.name;
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryTarget)}`;
+      window.open(url, '_blank');
+    }
+
     function renderTimeline() {
       const currentDay = appData[currentDayIndex];
       const container = document.getElementById('timelineContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       if (!currentDay.stops || currentDay.stops.length === 0) {
@@ -1701,23 +1468,9 @@
         const stopIcon = stop.icon || "fa-location-dot";
 
         let distFromOrigin = 0;
-        let distFromPrev = 0;
         if (stop.lat && stop.lng) {
           distFromOrigin = calculateDistanceKm(originLat, originLng, stop.lat, stop.lng);
-          if (idx > 0 && currentDay.stops[idx - 1].lat && currentDay.stops[idx - 1].lng) {
-            distFromPrev = calculateDistanceKm(currentDay.stops[idx - 1].lat, currentDay.stops[idx - 1].lng, stop.lat, stop.lng);
-          }
         }
-
-        const cleanName = stop.name.replace(/\(.*?\)/g, '').replace(/➔.*/g, '').trim();
-        let mapQueryTarget = "";
-        if (stop.address && stop.address.trim()) {
-          const addr = stop.address.trim();
-          mapQueryTarget = addr.includes(cleanName) ? addr : `${cleanName} ${addr}`;
-        } else {
-          mapQueryTarget = cleanName || ((stop.lat && stop.lng) ? `${stop.lat},${stop.lng}` : "大阪");
-        }
-        const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQueryTarget)}`;
 
         let badgeStyle = "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20";
         if (stop.category === 'food') badgeStyle = "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
@@ -1733,7 +1486,6 @@
               : 'theme-card-border hover:shadow-xs'
           }">
             
-            <!-- Top Metadata Row -->
             <div class="flex items-center justify-between gap-1 pb-1.5 border-b theme-card-border">
               <div class="flex items-center gap-1.5 flex-wrap min-w-0">
                 <span class="w-5 h-5 rounded-md ${
@@ -1747,17 +1499,17 @@
                 ${stop.stayMins > 0 ? `<span class="text-[9px] font-bold text-slate-400">停${stop.stayMins}分</span>` : ''}
                 
                 ${idx > 0 && distFromOrigin > 0 ? `
-                  <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" data-action="open-map" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1 active:scale-95 transition cursor-pointer" title="點擊在 Google Maps 以詳細地址直接導航 (距起點 ${distFromOrigin} km)">
+                  <button type="button" data-action="open-map" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 flex items-center gap-0.5 transition active:scale-95" title="點擊開啟 Google Maps 地圖">
                     <i class="fa-solid fa-location-arrow text-[8px]"></i>
                     <span>距起點 ${distFromOrigin}km</span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[7px] opacity-70"></i>
-                  </a>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[7px] ml-0.5 opacity-70"></i>
+                  </button>
                 ` : (isFirst ? `
-                  <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" data-action="open-map" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 border border-emerald-500/20 flex items-center gap-1 active:scale-95 transition cursor-pointer" title="點擊在 Google Maps 以詳細地址直接開啟起點站位置">
-                    <i class="fa-solid fa-location-dot text-[8px]"></i>
+                  <button type="button" data-action="open-map" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 hover:bg-emerald-500/20 flex items-center gap-0.5 transition active:scale-95" title="點擊在 Google Maps 查看起點">
+                    <i class="fa-solid fa-house-flag text-[8px]"></i>
                     <span>起點站</span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[7px] opacity-70"></i>
-                  </a>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[7px] ml-0.5 opacity-70"></i>
+                  </button>
                 ` : '')}
 
                 <span class="text-[9px] font-black px-1.5 py-0.2 rounded border ${badgeStyle}">
@@ -1778,7 +1530,6 @@
               </div>
             </div>
 
-            <!-- Content Body -->
             <div class="mt-1.5 space-y-1.5">
               <div class="flex items-center justify-between gap-1.5">
                 <h4 class="text-xs sm:text-sm font-black leading-snug group-hover:theme-primary-text transition truncate flex-1">
@@ -1791,12 +1542,11 @@
               </div>
 
               ${stop.address ? `
-                <div class="flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400">
-                  <i class="fa-solid fa-map-pin text-[9px] text-sky-500 flex-shrink-0"></i>
-                  <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" data-action="open-map" class="truncate hover:underline hover:text-sky-600" title="點擊在 Google Maps 開啟此地址">
-                    ${stop.address}
-                  </a>
-                </div>
+                <button type="button" data-action="open-map-address" class="text-[9.5px] text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 bg-slate-50 dark:bg-slate-800/60 hover:bg-sky-50 dark:hover:bg-slate-800 px-2 py-1 rounded-md border theme-card-border flex items-center gap-1.5 max-w-full text-left transition active:scale-98 group/addr" title="點擊直接在 Google Maps 導航此地址">
+                  <i class="fa-solid fa-location-dot text-[9px] text-rose-500 group-hover/addr:scale-110 transition-transform flex-shrink-0"></i>
+                  <span class="truncate underline underline-offset-2 decoration-slate-300 dark:decoration-slate-600 group-hover/addr:decoration-sky-500">${stop.address}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[7.5px] text-slate-400 group-hover/addr:text-sky-500 ml-auto flex-shrink-0"></i>
+                </button>
               ` : ''}
 
               ${stop.travelMode ? `
@@ -1818,9 +1568,25 @@
           </div>
         `;
 
-        const shopsBtn = item.querySelector('[data-action="select-shops"]');
-        if (shopsBtn) {
-          shopsBtn.addEventListener('click', (e) => {
+        const openMapBtn = item.querySelector('[data-action="open-map"]');
+        if (openMapBtn) {
+          openMapBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openGoogleMapsForStop(stop);
+          });
+        }
+
+        const openMapAddressBtn = item.querySelector('[data-action="open-map-address"]');
+        if (openMapAddressBtn) {
+          openMapAddressBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openGoogleMapsForStop(stop);
+          });
+        }
+
+        const selectShopsBtn = item.querySelector('[data-action="select-shops"]');
+        if (selectShopsBtn) {
+          selectShopsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             selectedStopId = stop.id;
             renderTimeline();
@@ -1836,13 +1602,6 @@
             openEditStopModal(stop);
           });
         }
-
-        const mapLinks = item.querySelectorAll('[data-action="open-map"]');
-        mapLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            e.stopPropagation();
-          });
-        });
 
         const upBtn = item.querySelector('[data-action="move-up"]');
         if (upBtn) {
@@ -1888,6 +1647,7 @@
       const currentDay = appData[currentDayIndex];
       const container = document.getElementById('shopsListContainer');
       const targetBadge = document.getElementById('shopTargetStopName');
+      if (!container || !targetBadge) return;
       container.innerHTML = '';
 
       let targetStops = currentDay.stops;
@@ -1940,9 +1700,7 @@
         }
 
         const shopIcon = shop.icon || "fa-utensils";
-        const shopCleanName = shop.name.split(' (')[0].trim();
-        const shopQueryTarget = shop.address ? (shop.address.includes(shopCleanName) ? shop.address : `${shopCleanName} ${shop.address}`) : (shop.query || shop.name);
-        const shopMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shopQueryTarget)}`;
+        const mapQuery = shop.address ? `${shop.name} ${shop.address}` : shop.name;
 
         const row = document.createElement('div');
         row.className = "pt-2 pb-2 group hover:bg-slate-50/80 dark:hover:bg-slate-800/50 rounded-lg px-1.5 transition";
@@ -1958,12 +1716,18 @@
                 <span class="text-[9px] text-slate-400 truncate max-w-[120px]">@ ${shop.parentStopName.split(' (')[0]}</span>
               </div>
               <h5 class="text-xs font-black group-hover:text-orange-600 transition truncate">${shop.name}</h5>
-              ${shop.address ? `<p class="text-[9.5px] text-slate-400 dark:text-slate-500 truncate flex items-center gap-1"><i class="fa-solid fa-map-pin text-[8px] text-orange-500"></i>${shop.address}</p>` : ''}
+              ${shop.address ? `
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 text-[9.5px] text-slate-500 hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-400 hover:underline max-w-full transition group/shopaddr" title="點擊直接在地圖開啟此店家地址">
+                  <i class="fa-solid fa-location-dot text-[8.5px] text-rose-500 flex-shrink-0"></i>
+                  <span class="truncate">${shop.address}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[7.5px] opacity-70 flex-shrink-0"></i>
+                </a>
+              ` : ''}
               <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-2">${shop.desc || '無特別備註'}</p>
             </div>
 
             <div class="flex items-center gap-0.5 flex-shrink-0 pt-0.5">
-              <a href="${shopMapUrl}" target="_blank" rel="noopener noreferrer" class="p-1 theme-primary-text hover:opacity-80 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95" title="以精確地址在 Google Maps 導航">
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}" target="_blank" class="p-1 theme-primary-text hover:opacity-80 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95" title="地圖導航">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
               </a>
             </div>
@@ -1975,6 +1739,7 @@
 
     function renderIconSelector(containerId, inputId, selectedIcon, previewHeaderId) {
       const container = document.getElementById(containerId);
+      if (!container) return;
       container.innerHTML = '';
 
       AVAILABLE_ICONS.forEach(iconObj => {
@@ -2109,7 +1874,7 @@
       document.getElementById('stopModal').classList.add('hidden');
       renderTimeline();
       renderShops();
-      showToast("景點節點已儲存！");
+      showToast("景點節點已儲存並同步！");
     }
 
     function handleDeleteStop() {
@@ -2152,7 +1917,6 @@
       document.getElementById('formShopCat').value = 'food';
       document.getElementById('formShopPrice').value = '$';
       document.getElementById('formShopDesc').value = '';
-      document.getElementById('formShopQuery').value = '';
       document.getElementById('formShopIcon').value = 'fa-utensils';
       document.getElementById('deleteShopBtn').classList.add('hidden');
 
@@ -2166,7 +1930,6 @@
       const targetStopId = document.getElementById('formShopStopTarget').value;
       const shopId = document.getElementById('formShopId').value;
       const shopName = document.getElementById('formShopName').value.trim();
-      const shopAddress = document.getElementById('formShopAddress').value.trim();
 
       if (!shopName) {
         showToast("請輸入店家名稱！");
@@ -2183,12 +1946,11 @@
 
       const shopData = {
         name: shopName,
-        address: shopAddress,
+        address: document.getElementById('formShopAddress').value.trim(),
         icon: document.getElementById('formShopIcon').value || 'fa-utensils',
         cat: document.getElementById('formShopCat').value,
         price: document.getElementById('formShopPrice').value,
-        desc: document.getElementById('formShopDesc').value.trim(),
-        query: document.getElementById('formShopQuery').value.trim() || `${shopName} ${shopAddress}`
+        desc: document.getElementById('formShopDesc').value.trim()
       };
 
       if (shopId) {
@@ -2207,7 +1969,7 @@
       document.getElementById('shopModal').classList.add('hidden');
       renderTimeline();
       renderShops();
-      showToast("街邊名店已成功儲存！");
+      showToast("街邊名店已成功儲存並同步！");
     }
 
     function handleDeleteShop() {
@@ -2373,13 +2135,41 @@
       document.getElementById('shopsDrawerContainer').classList.add('hidden');
     }
 
+    function copyCurrentShareLink() {
+      syncStateToUrl();
+      const currentUrl = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentUrl).then(() => {
+          showToast("最新行程網址已複製到剪貼簿！");
+        }).catch(() => fallbackCopy(currentUrl));
+      } else {
+        fallbackCopy(currentUrl);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      showToast("最新行程網址已複製！");
+    }
+
     function setupEventListeners() {
+      const shareLinkBtn = document.getElementById('shareLinkBtn');
+      if (shareLinkBtn) shareLinkBtn.addEventListener('click', copyCurrentShareLink);
+
+      const copyShareLinkInModalBtn = document.getElementById('copyShareLinkInModalBtn');
+      if (copyShareLinkInModalBtn) copyShareLinkInModalBtn.addEventListener('click', copyCurrentShareLink);
+
       document.getElementById('quickPresetFillBtn').addEventListener('click', () => {
         const queryName = document.getElementById('formStopName').value.trim();
         let match = POPULAR_LOCATIONS.find(loc => queryName && loc.name.includes(queryName));
         if (!match) {
           const names = POPULAR_LOCATIONS.map((l, i) => `${i + 1}. ${l.name}`).join("\n");
-          const input = prompt(`請選擇要套用的熱門景點座標編號 (1-${POPULAR_LOCATIONS.length})：\n${names}`, "1");
+          const input = prompt(`請選擇要套用的熱門景點編號 (1-${POPULAR_LOCATIONS.length})：\n${names}`, "1");
           const idx = parseInt(input) - 1;
           if (idx >= 0 && idx < POPULAR_LOCATIONS.length) match = POPULAR_LOCATIONS[idx];
         }
@@ -2394,7 +2184,7 @@
           const previewEl = document.getElementById('stopModalHeaderIcon');
           if (previewEl) previewEl.className = `fa-solid ${match.icon}`;
           renderIconSelector('stopIconGrid', 'formStopIcon', match.icon, 'stopModalHeaderIcon');
-          showToast(`已載入：${match.name} 地址與座標！`);
+          showToast(`已載入：${match.name} 與地址！`);
         }
       });
 
@@ -2480,14 +2270,7 @@
           text += `👉 ${s.from} 應轉給 ${s.to}：NT$ ${s.amountTWD.toLocaleString()} (約 ¥${s.amountJPY.toLocaleString()})\n`;
         });
         text += `\n📅 結算匯率基準：1 JPY = ${expenseData.rate} TWD`;
-
-        const tempInput = document.createElement('textarea');
-        tempInput.value = text;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempInput);
-        showToast("已複製結算文字，可直接貼到 LINE！");
+        fallbackCopy(text);
       });
 
       document.getElementById('viewToggleShopsBtn').addEventListener('click', openShopsDrawer);
@@ -2559,11 +2342,44 @@
 
       document.getElementById('resetDefaultBtn').addEventListener('click', () => {
         appData = JSON.parse(JSON.stringify(DEFAULT_ITINERARY_DATA));
+        window.location.hash = '';
         saveData();
         document.getElementById('dataModal').classList.add('hidden');
         renderAll();
         showToast("已重設為預設行程！");
       });
+
+      window.addEventListener('hashchange', () => {
+        if (loadStateFromUrl()) {
+          renderAll();
+          showToast("已更新為網址指定行程！");
+        }
+      });
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY) || 'ocean';
+      applyTheme(savedTheme, false);
+    }
+
+    function applyTheme(themeName, showNotif = true) {
+      if (themeName === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.setAttribute('data-theme', themeName);
+      }
+      localStorage.setItem(THEME_KEY, themeName);
+
+      document.querySelectorAll('.theme-select-btn').forEach(btn => {
+        if (btn.getAttribute('data-theme-val') === themeName) {
+          btn.classList.add('ring-2', 'ring-offset-1', 'ring-slate-900', 'dark:ring-white');
+        } else {
+          btn.classList.remove('ring-2', 'ring-offset-1', 'ring-slate-900', 'dark:ring-white');
+        }
+      });
+      if (showNotif) showToast(`已切換配色：${themeName}`);
     }
 
     function renderAll() {
@@ -2578,7 +2394,6 @@
       initData();
       renderAll();
       setupEventListeners();
-      initPOIAutocomplete();
     });
   </script>
 </body>
